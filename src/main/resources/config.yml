@@ -1,0 +1,19 @@
+# Allows the plugin to start even if it wasn't made for the current server version. This is dangerous and should only be used in a testing environment.
+allow-unsupported-versions: false
+
+# Filter specific settings.
+filters:
+  saturation:
+    enabled: true
+  worldseed:
+    enabled: false
+  enchantseed: 
+    enabled: true
+  entitydata:
+    enabled: true #This will toggle all entity data filters at once
+    health:
+      enabled: true
+    airticks:
+      enabled: false
+    xp:
+      enabled: true
