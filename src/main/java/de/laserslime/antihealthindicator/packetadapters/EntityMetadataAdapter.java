@@ -9,6 +9,7 @@ import org.bukkit.plugin.Plugin;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
+import com.comphenix.protocol.reflect.StructureModifier;
 import com.comphenix.protocol.wrappers.BukkitConverters;
 import com.comphenix.protocol.wrappers.WrappedWatchableObject;
 
@@ -23,14 +24,24 @@ public class EntityMetadataAdapter extends PacketAdapter {
 	@Override
 	public void onPacketSending(PacketEvent event) {
 		Entity entity = event.getPacket().getEntityModifier(event).readSafely(0);
-		List<WrappedWatchableObject> watchersold = event.getPacket().getLists(BukkitConverters.getWatchableObjectConverter()).readSafely(0);
+		StructureModifier<List<WrappedWatchableObject>> listModifier = event.getPacket().getLists(BukkitConverters.getWatchableObjectConverter());
+		List<WrappedWatchableObject> watchersold = listModifier.readSafely(0);
 		List<WrappedWatchableObject> watchersnew = new LinkedList<>(watchersold); // Create a copy to prevent ConcurrentModificationException
 		for(WrappedWatchableObject current : watchersold) {
-			if(plugin.getConfig().getBoolean("filters.entitydata.health.enabled") && !entity.equals(event.getPlayer())
+			if(plugin.getConfig().getBoolean("filters.entitydata.health.enabled")
 					&& (EntityDataIndex.HEALTH.match(entity.getClass(), current.getIndex()) || EntityDataIndex.ABSORPTION.match(entity.getClass(), current.getIndex()))
-					&& (float) current.getValue() > 0f) // Only filter if health is greater than 0 to keep the player death animation
+					&& !entity.equals(event.getPlayer()) && (float) current.getValue() > 0f) // Only filter if health is greater than 0 to keep the player death animation
 				watchersnew.remove(current);
+
+			if(plugin.getConfig().getBoolean("filters.entitydata.airticks.enabled") && EntityDataIndex.AIR_TICKS.match(entity.getClass(), current.getIndex()))
+				watchersnew.remove(current);
+
+			if(plugin.getConfig().getBoolean("filters.entitydata.xp.enabled") && EntityDataIndex.XP.match(entity.getClass(), current.getIndex()))
+				watchersnew.remove(current);
+			
+			if(current.getIndex() == 1)
+				System.out.println(current.getValue());
 		}
-		event.getPacket().getLists(BukkitConverters.getWatchableObjectConverter()).writeSafely(0, watchersnew);
+		listModifier.writeSafely(0, watchersnew);
 	}
 }

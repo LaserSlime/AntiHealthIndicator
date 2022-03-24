@@ -1,19 +1,19 @@
-# Allows the plugin to start even if it wasn't made for the current server version. This is dangerous and should only be used in a testing environment.
+#Allows the plugin to start even if it may not be compatible with the current server version. This can lead to unexpected bugs and should only be used in a testing environment.
 allow-unsupported-versions: false
 
-# Filter specific settings.
+#Filter specific settings.
 filters:
-  saturation:
+  saturation: #Prevents players from seeing their saturation value.
     enabled: true
-  worldseed:
+  worldseed: #Can make world seed cracking harder (but not impossible), but will slightly alter biome coloring.
     enabled: false
-  enchantseed: 
+  enchantseed: #Can make enchantment seed cracking harder (but not impossible), but will slightly alter the galactic alphabet text in the enchanting table menu. (That text is useless anyways)
     enabled: true
   entitydata:
-    enabled: true #This will toggle all entity data filters at once
-    health:
-      enabled: true
-    airticks:
+    enabled: true #This will toggle all entity data filters at once.
+    airticks: #Hides the air amount of other entities.
       enabled: false
-    xp:
+    health: #Hides the health of other entities.
+      enabled: true
+    xp: #Hides the xp level of other players.
       enabled: true
