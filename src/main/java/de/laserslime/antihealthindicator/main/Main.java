@@ -15,12 +15,13 @@ public class Main extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		saveDefaultConfig();
-		if(Version.getServerVersion() == null && !getConfig().getBoolean("allow-unsupported-versions")) {
+		if(Version.getServerVersion() == null && !getConfig().getBoolean("allow-unsupported-versions", false)) {
 			getLogger().info("Unsupported server version detected! Plugin will be disabled to prevent unexpected issues. Please check if theres an update available that supports this version.");
 			getLogger().info("You can allow unsupported versions in the config.yml AT YOUR OWN RISK.");
 			getPluginLoader().disablePlugin(this);
 			return;
 		}
+
 		if(getConfig().getBoolean("filters.entitydata.enabled", true))
 			ProtocolLibrary.getProtocolManager().addPacketListener(new EntityMetadataAdapter(this));
 
