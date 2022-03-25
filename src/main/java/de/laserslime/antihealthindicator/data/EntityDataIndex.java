@@ -65,7 +65,7 @@ public class EntityDataIndex {
 	}
 
 	public boolean match(Class<?> entityClass, int index) {
-		return this.entityClass.equals(entityClass) && this.index == index;
+		return this.index == index && this.entityClass.isAssignableFrom(entityClass);
 	}
 
 	public int getIndex() {
