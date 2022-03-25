@@ -21,16 +21,16 @@ public class Main extends JavaPlugin {
 			getPluginLoader().disablePlugin(this);
 			return;
 		}
-		if(getConfig().getBoolean("filters.entitydata.enabled"))
+		if(getConfig().getBoolean("filters.entitydata.enabled", true))
 			ProtocolLibrary.getProtocolManager().addPacketListener(new EntityMetadataAdapter(this));
 
-		if(getConfig().getBoolean("filters.saturation.enabled"))
+		if(getConfig().getBoolean("filters.saturation.enabled", true))
 			ProtocolLibrary.getProtocolManager().addPacketListener(new UpdateHealthAdapter(this));
 
-		if(getConfig().getBoolean("filters.enchantseed.enabled"))
+		if(getConfig().getBoolean("filters.enchantseed.enabled", true))
 			ProtocolLibrary.getProtocolManager().addPacketListener(new WindowDataAdapter(this));
 
-		if(getConfig().getBoolean("filters.worldseed.enabled"))
+		if(getConfig().getBoolean("filters.worldseed.enabled", false))
 			ProtocolLibrary.getProtocolManager().addPacketListener(new WorldSeedAdapter(this));
 	}
 

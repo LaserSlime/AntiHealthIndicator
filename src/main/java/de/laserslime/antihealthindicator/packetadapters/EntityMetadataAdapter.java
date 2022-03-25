@@ -28,15 +28,15 @@ public class EntityMetadataAdapter extends PacketAdapter {
 		List<WrappedWatchableObject> watchersold = listModifier.readSafely(0);
 		List<WrappedWatchableObject> watchersnew = new LinkedList<>(watchersold); // Create a copy to prevent ConcurrentModificationException
 		for(WrappedWatchableObject current : watchersold) {
-			if(plugin.getConfig().getBoolean("filters.entitydata.health.enabled")
+			if(plugin.getConfig().getBoolean("filters.entitydata.health.enabled", true)
 					&& (EntityDataIndex.HEALTH.match(entity.getClass(), current.getIndex()) || EntityDataIndex.ABSORPTION.match(entity.getClass(), current.getIndex()))
 					&& !entity.equals(event.getPlayer()) && (float) current.getValue() > 0f) // Only filter if health is greater than 0 to keep the player death animation
 				watchersnew.remove(current);
 
-			if(plugin.getConfig().getBoolean("filters.entitydata.airticks.enabled") && EntityDataIndex.AIR_TICKS.match(entity.getClass(), current.getIndex()))
+			if(plugin.getConfig().getBoolean("filters.entitydata.airticks.enabled", false) && EntityDataIndex.AIR_TICKS.match(entity.getClass(), current.getIndex()))
 				watchersnew.remove(current);
 
-			if(plugin.getConfig().getBoolean("filters.entitydata.xp.enabled") && EntityDataIndex.XP.match(entity.getClass(), current.getIndex()))
+			if(plugin.getConfig().getBoolean("filters.entitydata.xp.enabled", true) && EntityDataIndex.XP.match(entity.getClass(), current.getIndex()))
 				watchersnew.remove(current);
 		}
 		listModifier.writeSafely(0, watchersnew);
