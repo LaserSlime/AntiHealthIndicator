@@ -38,9 +38,6 @@ public class EntityMetadataAdapter extends PacketAdapter {
 
 			if(plugin.getConfig().getBoolean("filters.entitydata.xp.enabled") && EntityDataIndex.XP.match(entity.getClass(), current.getIndex()))
 				watchersnew.remove(current);
-			
-			if(current.getIndex() == 1)
-				System.out.println(current.getValue());
 		}
 		listModifier.writeSafely(0, watchersnew);
 	}
