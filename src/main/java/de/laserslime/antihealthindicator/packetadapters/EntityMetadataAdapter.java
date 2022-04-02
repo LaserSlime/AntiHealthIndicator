@@ -30,7 +30,7 @@ public class EntityMetadataAdapter extends PacketAdapter {
 		for(WrappedWatchableObject current : watchersold) {
 			if(plugin.getConfig().getBoolean("filters.entitydata.health.enabled", true)
 					&& (EntityDataIndex.HEALTH.match(entity.getClass(), current.getIndex()) || EntityDataIndex.ABSORPTION.match(entity.getClass(), current.getIndex()))
-					&& !entity.equals(event.getPlayer()) && (float) current.getValue() > 0f) // Only filter if health is greater than 0 to keep the player death animation
+					&& !entity.equals(event.getPlayer()) && event.getPlayer().getVehicle() != entity && (float) current.getValue() > 0f) // Only filter if health is greater than 0 to keep the player death animation
 				watchersnew.remove(current);
 
 			if(plugin.getConfig().getBoolean("filters.entitydata.airticks.enabled", false) && EntityDataIndex.AIR_TICKS.match(entity.getClass(), current.getIndex()))

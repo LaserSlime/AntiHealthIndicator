@@ -5,6 +5,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.comphenix.protocol.ProtocolLibrary;
 
 import de.laserslime.antihealthindicator.packetadapters.EntityMetadataAdapter;
+import de.laserslime.antihealthindicator.packetadapters.MountAdapter;
 import de.laserslime.antihealthindicator.packetadapters.UpdateHealthAdapter;
 import de.laserslime.antihealthindicator.packetadapters.WindowDataAdapter;
 import de.laserslime.antihealthindicator.packetadapters.WorldSeedAdapter;
@@ -33,6 +34,8 @@ public class Main extends JavaPlugin {
 
 		if(getConfig().getBoolean("filters.worldseed.enabled", false))
 			ProtocolLibrary.getProtocolManager().addPacketListener(new WorldSeedAdapter(this));
+		
+		ProtocolLibrary.getProtocolManager().addPacketListener(new MountAdapter(this));
 	}
 
 	@Override
