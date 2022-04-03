@@ -11,7 +11,7 @@ filters:
     enabled: true
   entitydata:
     enabled: true #This will toggle all entity data filters at once.
-    airticks: #Hides the air amount of other entities.
+    airticks: #Hides the oxygen amount of other entities.
       enabled: false
     health: #Hides the health of other entities.
       enabled: true
