@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import com.comphenix.protocol.PacketType;
@@ -23,32 +24,37 @@ public class EntityMetadataAdapter extends PacketAdapter {
 
 	@Override
 	public void onPacketSending(PacketEvent event) {
+		Entity entity = event.getPacket().getEntityModifier(event).readSafely(0);
 		if(event.getPacketType() != PacketType.Play.Server.ENTITY_METADATA) {
-			WrappedDataWatcher watcher = event.getPacket().getDataWatcherModifier().readSafely(0).deepClone();
-			watcher.remove(EntityDataIndex.HEALTH.getIndex());
-			event.getPacket().getDataWatcherModifier().write(0, watcher);
+			WrappedDataWatcher watcher = event.getPacket().getDataWatcherModifier().readSafely(0);
+			if(watcher != null) {
+				List<WrappedWatchableObject> data = watcher.deepClone().getWatchableObjects();
+				event.getPacket().getDataWatcherModifier().write(0, new WrappedDataWatcher(filter(entity, event.getPlayer(), data)));
+			}
 		}
 		StructureModifier<List<WrappedWatchableObject>> listModifier = event.getPacket().getWatchableCollectionModifier();
 		List<WrappedWatchableObject> watchersold = listModifier.readSafely(0);
-		if(watchersold == null) {// 1.15+ doesn't send the metadata in the spawn mob and spawn player packets
+		if(watchersold == null) // 1.15+ doesn't send the metadata in the spawn mob and spawn player packets
 			return;
-		}
+			
+		listModifier.writeSafely(0, filter(entity, event.getPlayer(), watchersold));
+	}
 
-		Entity entity = event.getPacket().getEntityModifier(event).readSafely(0);
-		List<WrappedWatchableObject> watchersnew = new LinkedList<>(watchersold); // Create a copy to prevent ConcurrentModificationException
-		for(WrappedWatchableObject current : watchersold) {
+	private List<WrappedWatchableObject> filter(Entity entity, Player receiver, List<WrappedWatchableObject> olddata) {
+		List<WrappedWatchableObject> newdata = new LinkedList<>(olddata); // Create a copy to prevent ConcurrentModificationException
+		for(WrappedWatchableObject current : olddata) {
 			if(plugin.getConfig().getBoolean("filters.entitydata.health.enabled", true)
 					&& (EntityDataIndex.HEALTH.match(entity.getClass(), current.getIndex()) || EntityDataIndex.ABSORPTION.match(entity.getClass(), current.getIndex()))
-					&& !entity.equals(event.getPlayer()) && event.getPlayer().getVehicle() != entity && (float) current.getValue() > 0f) // Only filter if health is greater than 0 to keep the player
+					&& !entity.equals(receiver) && receiver.getVehicle() != entity && (float) current.getValue() > 0f) // Only filter if health is greater than 0 to keep the player
 																																			// death animation
-				watchersnew.remove(current);
+				newdata.remove(current);
 
 			if(plugin.getConfig().getBoolean("filters.entitydata.airticks.enabled", false) && EntityDataIndex.AIR_TICKS.match(entity.getClass(), current.getIndex()))
-				watchersnew.remove(current);
+				newdata.remove(current);
 
 			if(plugin.getConfig().getBoolean("filters.entitydata.xp.enabled", true) && EntityDataIndex.XP.match(entity.getClass(), current.getIndex()))
-				watchersnew.remove(current);
+				newdata.remove(current);
 		}
-		listModifier.writeSafely(0, watchersnew);
+		return newdata;
 	}
 }
