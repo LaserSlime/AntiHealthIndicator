@@ -14,7 +14,6 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
-import com.comphenix.protocol.wrappers.BukkitConverters;
 import com.comphenix.protocol.wrappers.WrappedWatchableObject;
 
 import de.laserslime.antihealthindicator.data.EntityDataIndex;
@@ -38,7 +37,7 @@ public class AttachEntityAdapter extends PacketAdapter {
 				packet.getEntityModifier(event).writeSafely(0, vehicle);
 				List<WrappedWatchableObject> watchers = new LinkedList<>();
 				watchers.add(new WrappedWatchableObject(EntityDataIndex.HEALTH.getIndex(), (float) livingVehicle.getHealth()));
-				packet.getLists(BukkitConverters.getWatchableObjectConverter()).writeSafely(0, watchers);
+				packet.getWatchableCollectionModifier().writeSafely(0, watchers);
 				try {
 					ProtocolLibrary.getProtocolManager().sendServerPacket((Player) passenger, packet);
 				} catch(InvocationTargetException ex) {
