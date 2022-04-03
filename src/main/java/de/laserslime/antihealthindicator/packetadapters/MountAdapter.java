@@ -1,8 +1,6 @@
 package de.laserslime.antihealthindicator.packetadapters;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.LinkedList;
-import java.util.List;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -14,7 +12,9 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
-import com.comphenix.protocol.wrappers.WrappedWatchableObject;
+import com.comphenix.protocol.wrappers.WrappedDataWatcher;
+import com.comphenix.protocol.wrappers.WrappedDataWatcher.Registry;
+import com.comphenix.protocol.wrappers.WrappedDataWatcher.WrappedDataWatcherObject;
 
 import de.laserslime.antihealthindicator.data.EntityDataIndex;
 
@@ -26,17 +26,18 @@ public class MountAdapter extends PacketAdapter {
 
 	@Override
 	public void onPacketSending(PacketEvent event) {
-		int id = event.getPacket().getIntegerArrays().readSafely(0)[0];
-		Entity passenger = ProtocolLibrary.getProtocolManager().getEntityFromID(event.getPlayer().getWorld(), id);
-		if(passenger instanceof Player) {
+		int[] ids = event.getPacket().getIntegerArrays().readSafely(0);
+		if(ids.length <= 0) return; //if the array is empty they are dismounting
+		Entity passenger = ProtocolLibrary.getProtocolManager().getEntityFromID(event.getPlayer().getWorld(), ids[0]);
+		if(passenger instanceof Player && passenger.equals(event.getPlayer())) {
 			Entity vehicle = event.getPacket().getEntityModifier(event).readSafely(0);
 			if(vehicle instanceof LivingEntity) {
 				LivingEntity livingVehicle = (LivingEntity) vehicle;
 				PacketContainer packet = new PacketContainer(PacketType.Play.Server.ENTITY_METADATA);
-				packet.getEntityModifier(event).writeSafely(0, passenger);
-				List<WrappedWatchableObject> watchers = new LinkedList<>();
-				watchers.add(new WrappedWatchableObject(EntityDataIndex.HEALTH.getIndex(), (float) livingVehicle.getHealth()));
-				packet.getWatchableCollectionModifier().writeSafely(0, watchers);
+				packet.getEntityModifier(event).writeSafely(0, livingVehicle);
+				WrappedDataWatcher watcher = new WrappedDataWatcher(livingVehicle);
+				watcher.setObject(new WrappedDataWatcherObject(EntityDataIndex.HEALTH.getIndex(), Registry.get(Float.class)), (float) livingVehicle.getHealth());
+				packet.getWatchableCollectionModifier().writeSafely(0, watcher.getWatchableObjects());
 				try {
 					ProtocolLibrary.getProtocolManager().sendServerPacket((Player) passenger, packet);
 				} catch(InvocationTargetException ex) {
