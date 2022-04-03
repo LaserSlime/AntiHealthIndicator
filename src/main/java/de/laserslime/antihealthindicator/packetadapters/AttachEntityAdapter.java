@@ -14,6 +14,7 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
+import com.comphenix.protocol.reflect.StructureModifier;
 import com.comphenix.protocol.wrappers.WrappedWatchableObject;
 
 import de.laserslime.antihealthindicator.data.EntityDataIndex;
@@ -28,13 +29,14 @@ public class AttachEntityAdapter extends PacketAdapter {
 	public void onPacketSending(PacketEvent event) {
 		if(event.getPacket().getIntegers().readSafely(0) != 0) // value of 1 indicates leashing while 0 indicates passenger change
 			return;
-		Entity passenger = event.getPacket().getEntityModifier(event).readSafely(1);
+		StructureModifier<Entity> entityModifier = event.getPacket().getEntityModifier(event);
+		Entity passenger = entityModifier.readSafely(1);
 		if(passenger instanceof Player) {
-			Entity vehicle = event.getPacket().getEntityModifier(event).readSafely(2);
+			Entity vehicle = entityModifier.readSafely(2);
 			if(vehicle instanceof LivingEntity) {
 				LivingEntity livingVehicle = (LivingEntity) vehicle;
 				PacketContainer packet = new PacketContainer(PacketType.Play.Server.ENTITY_METADATA);
-				packet.getEntityModifier(event).writeSafely(0, vehicle);
+				entityModifier.writeSafely(0, vehicle);
 				List<WrappedWatchableObject> watchers = new LinkedList<>();
 				watchers.add(new WrappedWatchableObject(EntityDataIndex.HEALTH.getIndex(), (float) livingVehicle.getHealth()));
 				packet.getWatchableCollectionModifier().writeSafely(0, watchers);

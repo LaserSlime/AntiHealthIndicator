@@ -26,16 +26,15 @@ public class EntityMetadataAdapter extends PacketAdapter {
 	public void onPacketSending(PacketEvent event) {
 		Entity entity = event.getPacket().getEntityModifier(event).readSafely(0);
 		if(event.getPacketType() != PacketType.Play.Server.ENTITY_METADATA) {
-			WrappedDataWatcher watcher = event.getPacket().getDataWatcherModifier().readSafely(0);
-			if(watcher != null) {
-				List<WrappedWatchableObject> data = watcher.deepClone().getWatchableObjects();
-				event.getPacket().getDataWatcherModifier().write(0, new WrappedDataWatcher(filter(entity, event.getPlayer(), data)));
-			}
+			StructureModifier<WrappedDataWatcher> watcherModifier = event.getPacket().getDataWatcherModifier();
+			WrappedDataWatcher watcher = watcherModifier.readSafely(0);
+			if(watcher != null)
+				watcherModifier.writeSafely(0, new WrappedDataWatcher(filter(entity, event.getPlayer(), watcher.getWatchableObjects())));
 		}
-		StructureModifier<List<WrappedWatchableObject>> listModifier = event.getPacket().getWatchableCollectionModifier();
-		List<WrappedWatchableObject> watchersold = listModifier.readSafely(0);
+		StructureModifier<List<WrappedWatchableObject>> watchableCollectionModifier = event.getPacket().getWatchableCollectionModifier();
+		List<WrappedWatchableObject> watchersold = watchableCollectionModifier.readSafely(0);
 		if(watchersold != null)
-			listModifier.writeSafely(0, filter(entity, event.getPlayer(), watchersold));
+			watchableCollectionModifier.writeSafely(0, filter(entity, event.getPlayer(), watchersold));
 	}
 
 	private List<WrappedWatchableObject> filter(Entity entity, Player receiver, List<WrappedWatchableObject> olddata) {
