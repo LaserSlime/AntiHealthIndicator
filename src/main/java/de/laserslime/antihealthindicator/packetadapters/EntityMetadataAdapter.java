@@ -34,10 +34,8 @@ public class EntityMetadataAdapter extends PacketAdapter {
 		}
 		StructureModifier<List<WrappedWatchableObject>> listModifier = event.getPacket().getWatchableCollectionModifier();
 		List<WrappedWatchableObject> watchersold = listModifier.readSafely(0);
-		if(watchersold == null) // 1.15+ doesn't send the metadata in the spawn mob and spawn player packets
-			return;
-			
-		listModifier.writeSafely(0, filter(entity, event.getPlayer(), watchersold));
+		if(watchersold != null)
+			listModifier.writeSafely(0, filter(entity, event.getPlayer(), watchersold));
 	}
 
 	private List<WrappedWatchableObject> filter(Entity entity, Player receiver, List<WrappedWatchableObject> olddata) {
