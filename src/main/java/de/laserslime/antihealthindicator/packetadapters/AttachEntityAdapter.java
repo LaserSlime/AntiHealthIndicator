@@ -19,24 +19,25 @@ import com.comphenix.protocol.wrappers.WrappedWatchableObject;
 
 import de.laserslime.antihealthindicator.data.EntityDataIndex;
 
-public class MountAdapter extends PacketAdapter {
+public class AttachEntityAdapter extends PacketAdapter {
 
-	public MountAdapter(Plugin plugin) {
-		super(plugin, PacketType.Play.Server.MOUNT);
+	public AttachEntityAdapter(Plugin plugin) {
+		super(plugin, PacketType.Play.Server.ATTACH_ENTITY);
 	}
 
 	@Override
 	public void onPacketSending(PacketEvent event) {
-		int id = event.getPacket().getIntegerArrays().readSafely(0)[0];
-		Entity passenger = ProtocolLibrary.getProtocolManager().getEntityFromID(event.getPlayer().getWorld(), id);
+		if(event.getPacket().getIntegers().readSafely(0) != 0) // value of 1 indicates leashing while 0 indicates passenger change
+			return;
+		Entity passenger = event.getPacket().getEntityModifier(event).readSafely(1);
 		if(passenger instanceof Player) {
-			Entity vehicle = event.getPacket().getEntityModifier(event).readSafely(0);
+			Entity vehicle = event.getPacket().getEntityModifier(event).readSafely(2);
 			if(vehicle instanceof LivingEntity) {
 				LivingEntity livingVehicle = (LivingEntity) vehicle;
 				PacketContainer packet = new PacketContainer(PacketType.Play.Server.ENTITY_METADATA);
-				packet.getEntityModifier(event).writeSafely(0, passenger);
+				packet.getEntityModifier(event).writeSafely(0, vehicle);
 				List<WrappedWatchableObject> watchers = new LinkedList<>();
-				watchers.add(new WrappedWatchableObject(EntityDataIndex.HEALTH.getIndex(), livingVehicle.getHealth()));
+				watchers.add(new WrappedWatchableObject(EntityDataIndex.HEALTH.getIndex(), (float) livingVehicle.getHealth()));
 				packet.getLists(BukkitConverters.getWatchableObjectConverter()).writeSafely(0, watchers);
 				try {
 					ProtocolLibrary.getProtocolManager().sendServerPacket((Player) passenger, packet);
@@ -46,5 +47,4 @@ public class MountAdapter extends PacketAdapter {
 			}
 		}
 	}
-
 }

@@ -4,6 +4,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.comphenix.protocol.ProtocolLibrary;
 
+import de.laserslime.antihealthindicator.packetadapters.AttachEntityAdapter;
 import de.laserslime.antihealthindicator.packetadapters.EntityMetadataAdapter;
 import de.laserslime.antihealthindicator.packetadapters.MountAdapter;
 import de.laserslime.antihealthindicator.packetadapters.UpdateHealthAdapter;
@@ -16,7 +17,8 @@ public class Main extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		saveDefaultConfig();
-		if(Version.getServerVersion() == null && !getConfig().getBoolean("allow-unsupported-versions", false)) {
+		Version version = Version.getServerVersion();
+		if(version == Version.UNKNOWN && !getConfig().getBoolean("allow-unsupported-versions", false)) {
 			getLogger().info("Unsupported server version detected! Plugin will be disabled to prevent unexpected issues. Please check if theres an update available that supports this version.");
 			getLogger().info("You can allow unsupported versions in the config.yml AT YOUR OWN RISK.");
 			getPluginLoader().disablePlugin(this);
@@ -34,8 +36,22 @@ public class Main extends JavaPlugin {
 
 		if(getConfig().getBoolean("filters.worldseed.enabled", false))
 			ProtocolLibrary.getProtocolManager().addPacketListener(new WorldSeedAdapter(this));
-		
-		ProtocolLibrary.getProtocolManager().addPacketListener(new MountAdapter(this));
+
+
+		if(version.getProtocolVersion() > Version.V1_8_4.getProtocolVersion()) // 1.8 uses a different packet for mounting entities
+			ProtocolLibrary.getProtocolManager().addPacketListener(new MountAdapter(this));
+		else
+			ProtocolLibrary.getProtocolManager().addPacketListener(new AttachEntityAdapter(this));
+//		ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(this, PacketType.values()) {
+//
+//			@Override
+//			public void onPacketSending(PacketEvent event) {
+//				System.out.println(event.getPacketType());
+//			}
+//
+//			@Override
+//			public void onPacketReceiving(PacketEvent event) {}
+//		});
 	}
 
 	@Override
