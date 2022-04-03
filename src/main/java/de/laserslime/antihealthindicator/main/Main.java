@@ -37,21 +37,12 @@ public class Main extends JavaPlugin {
 		if(getConfig().getBoolean("filters.worldseed.enabled", false))
 			ProtocolLibrary.getProtocolManager().addPacketListener(new WorldSeedAdapter(this));
 
-
-		if(version.getProtocolVersion() > Version.V1_8_4.getProtocolVersion()) // 1.8 uses a different packet for mounting entities
-			ProtocolLibrary.getProtocolManager().addPacketListener(new MountAdapter(this));
-		else
-			ProtocolLibrary.getProtocolManager().addPacketListener(new AttachEntityAdapter(this));
-//		ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(this, PacketType.values()) {
-//
-//			@Override
-//			public void onPacketSending(PacketEvent event) {
-//				System.out.println(event.getPacketType());
-//			}
-//
-//			@Override
-//			public void onPacketReceiving(PacketEvent event) {}
-//		});
+		if(getConfig().getBoolean("filters.entitydata.health.enabled", true)) { //Only apply mount fix if health filtering is enabled
+			if(version.getProtocolVersion() > Version.V1_8_4.getProtocolVersion()) // 1.8 uses a different packet for mounting entities
+				ProtocolLibrary.getProtocolManager().addPacketListener(new MountAdapter(this));
+			else
+				ProtocolLibrary.getProtocolManager().addPacketListener(new AttachEntityAdapter(this));
+		}
 	}
 
 	@Override
