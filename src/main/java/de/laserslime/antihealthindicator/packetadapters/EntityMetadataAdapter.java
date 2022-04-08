@@ -39,7 +39,8 @@ public class EntityMetadataAdapter extends PacketAdapter {
 	}
 
 	private List<WrappedWatchableObject> filter(Entity entity, Player receiver, List<WrappedWatchableObject> olddata) {
-		List<WrappedWatchableObject> newdata = new LinkedList<>(olddata); // Create a copy to prevent ConcurrentModificationException
+		// Create a copy to prevent ConcurrentModificationException
+		List<WrappedWatchableObject> newdata = new LinkedList<>(olddata);
 		for(WrappedWatchableObject current : olddata) {
 			if(EntityDataIndex.HEALTH.match(entity.getClass(), current.getIndex()) || EntityDataIndex.ABSORPTION.match(entity.getClass(), current.getIndex())) {
 				if(!plugin.getConfig().getBoolean("filters.entitydata.health.enabled", true) || receiver.equals(entity) || receiver.getVehicle() == entity || (float) current.getValue() <= 0f)

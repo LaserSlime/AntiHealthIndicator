@@ -28,7 +28,9 @@ public class MountAdapter extends PacketAdapter {
 	@Override
 	public void onPacketSending(PacketEvent event) {
 		int[] ids = event.getPacket().getIntegerArrays().readSafely(0);
-		if(ids.length <= 0) return; //if the array is empty they are dismounting
+		// if the array is empty they are dismounting
+		if(ids.length <= 0)
+			return;
 		Entity passenger = ProtocolLibrary.getProtocolManager().getEntityFromID(event.getPlayer().getWorld(), ids[0]);
 		if(passenger instanceof Player && passenger.equals(event.getPlayer())) {
 			StructureModifier<Entity> entityModifier = event.getPacket().getEntityModifier(event);
@@ -48,5 +50,4 @@ public class MountAdapter extends PacketAdapter {
 			}
 		}
 	}
-
 }

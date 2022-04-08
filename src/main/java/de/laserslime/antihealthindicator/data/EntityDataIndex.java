@@ -23,11 +23,13 @@ public class EntityDataIndex {
 		this.entityClass = entityClass;
 	}
 
+	// Cool spaghetti code ik, but it's probably the best way in terms of performance and ram usage
 	static {
-		// Cool spaghetti code ik, but it's probably the best way in terms of performance and ram usage
 		int serverProtocol = Version.getServerVersion().getProtocolVersion();
-		AIR_TICKS = new EntityDataIndex(1, Integer.class, Entity.class);//This stays the same for all versions
-		
+
+		// This stays the same for all versions
+		AIR_TICKS = new EntityDataIndex(1, Integer.class, Entity.class);
+
 		if(serverProtocol >= Version.V1_17_0.getProtocolVersion())
 			HEALTH = new EntityDataIndex(9, Float.class, LivingEntity.class);
 		else if(serverProtocol >= Version.V1_14_0.getProtocolVersion())

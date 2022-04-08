@@ -27,7 +27,8 @@ public class AttachEntityAdapter extends PacketAdapter {
 
 	@Override
 	public void onPacketSending(PacketEvent event) {
-		if(event.getPacket().getIntegers().readSafely(0) != 0) // value of 1 indicates leashing while 0 indicates passenger change
+		// value of 1 indicates leashing while 0 indicates passenger change
+		if(event.getPacket().getIntegers().readSafely(0) != 0)
 			return;
 		StructureModifier<Entity> entityModifier = event.getPacket().getEntityModifier(event);
 		Entity passenger = entityModifier.readSafely(1);
