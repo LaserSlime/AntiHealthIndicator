@@ -36,7 +36,7 @@ public class MountAdapter extends PacketAdapter {
 			if(vehicle instanceof LivingEntity) {
 				LivingEntity livingVehicle = (LivingEntity) vehicle;
 				PacketContainer packet = new PacketContainer(PacketType.Play.Server.ENTITY_METADATA);
-				entityModifier.writeSafely(0, livingVehicle);
+				packet.getEntityModifier(event).writeSafely(0, livingVehicle);
 				WrappedDataWatcher watcher = new WrappedDataWatcher(livingVehicle);
 				watcher.setObject(new WrappedDataWatcherObject(EntityDataIndex.HEALTH.getIndex(), Registry.get(Float.class)), (float) livingVehicle.getHealth());
 				packet.getWatchableCollectionModifier().writeSafely(0, watcher.getWatchableObjects());
