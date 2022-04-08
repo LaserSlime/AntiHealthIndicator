@@ -36,7 +36,7 @@ public class AttachEntityAdapter extends PacketAdapter {
 			if(vehicle instanceof LivingEntity) {
 				LivingEntity livingVehicle = (LivingEntity) vehicle;
 				PacketContainer packet = new PacketContainer(PacketType.Play.Server.ENTITY_METADATA);
-				entityModifier.writeSafely(0, vehicle);
+				packet.getEntityModifier(event).writeSafely(0, vehicle);
 				List<WrappedWatchableObject> watchers = new LinkedList<>();
 				watchers.add(new WrappedWatchableObject(EntityDataIndex.HEALTH.getIndex(), (float) livingVehicle.getHealth()));
 				packet.getWatchableCollectionModifier().writeSafely(0, watchers);
