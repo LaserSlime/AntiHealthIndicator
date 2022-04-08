@@ -14,6 +14,6 @@ public class WorldSeedAdapter extends PacketAdapter {
 
 	@Override
 	public void onPacketSending(PacketEvent event) {
-		event.getPacket().getLongs().writeSafely(0, 0l);
+		event.getPacket().getLongs().writeSafely(0, 0L);
 	}
 }
