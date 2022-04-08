@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Wolf;
 import org.bukkit.plugin.Plugin;
 
 import com.comphenix.protocol.PacketType;
@@ -40,17 +41,22 @@ public class EntityMetadataAdapter extends PacketAdapter {
 	private List<WrappedWatchableObject> filter(Entity entity, Player receiver, List<WrappedWatchableObject> olddata) {
 		List<WrappedWatchableObject> newdata = new LinkedList<>(olddata); // Create a copy to prevent ConcurrentModificationException
 		for(WrappedWatchableObject current : olddata) {
-			if(plugin.getConfig().getBoolean("filters.entitydata.health.enabled", true)
-					&& (EntityDataIndex.HEALTH.match(entity.getClass(), current.getIndex()) || EntityDataIndex.ABSORPTION.match(entity.getClass(), current.getIndex()))
-					&& !entity.equals(receiver) && receiver.getVehicle() != entity && (float) current.getValue() > 0f) // Only filter if health is greater than 0 to keep the player
-																																			// death animation
-				newdata.remove(current);
-
-			if(plugin.getConfig().getBoolean("filters.entitydata.airticks.enabled", false) && EntityDataIndex.AIR_TICKS.match(entity.getClass(), current.getIndex()))
-				newdata.remove(current);
-
-			if(plugin.getConfig().getBoolean("filters.entitydata.xp.enabled", true) && EntityDataIndex.XP.match(entity.getClass(), current.getIndex()))
-				newdata.remove(current);
+			if(EntityDataIndex.HEALTH.match(entity.getClass(), current.getIndex()) || EntityDataIndex.ABSORPTION.match(entity.getClass(), current.getIndex())) {
+				if(!plugin.getConfig().getBoolean("filters.entitydata.health.enabled", true) || receiver.equals(entity) || receiver.getVehicle() == entity || (float) current.getValue() <= 0f)
+					continue;
+				if(entity instanceof Wolf) {
+					Wolf wolf = (Wolf) entity;
+					if(!wolf.isTamed())
+						newdata.remove(current);
+				} else
+					newdata.remove(current);
+			} else if(EntityDataIndex.AIR_TICKS.match(entity.getClass(), current.getIndex())) {
+				if(plugin.getConfig().getBoolean("filters.entitydata.airticks.enabled", false))
+					newdata.remove(current);
+			} else if(EntityDataIndex.XP.match(entity.getClass(), current.getIndex())) {
+				if(plugin.getConfig().getBoolean("filters.entitydata.xp.enabled", true))
+					newdata.remove(current);
+			}
 		}
 		return newdata;
 	}
