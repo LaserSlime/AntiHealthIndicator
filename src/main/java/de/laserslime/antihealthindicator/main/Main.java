@@ -37,8 +37,8 @@ public class Main extends JavaPlugin {
 		if(getConfig().getBoolean("filters.worldseed.enabled", false))
 			ProtocolLibrary.getProtocolManager().addPacketListener(new WorldSeedAdapter(this));
 
-		// Only apply mount fix if health filtering is enabled
-		if(getConfig().getBoolean("filters.entitydata.health.enabled", true)) {
+		// Only apply mount fix if health filtering is enabled and vehicles are ignored
+		if(getConfig().getBoolean("filters.entitydata.health.enabled", true) && getConfig().getBoolean("filters.entitydata.health.ignore-vehicles", true)) {
 			// 1.8 uses a different packet for mounting entities
 			if(version.getProtocolVersion() > Version.V1_8_4.getProtocolVersion())
 				ProtocolLibrary.getProtocolManager().addPacketListener(new MountAdapter(this));

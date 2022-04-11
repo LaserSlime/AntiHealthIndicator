@@ -43,9 +43,10 @@ public class EntityMetadataAdapter extends PacketAdapter {
 		List<WrappedWatchableObject> newdata = new LinkedList<>(olddata);
 		for(WrappedWatchableObject current : olddata) {
 			if(EntityDataIndex.HEALTH.match(entity.getClass(), current.getIndex()) || EntityDataIndex.ABSORPTION.match(entity.getClass(), current.getIndex())) {
-				if(!plugin.getConfig().getBoolean("filters.entitydata.health.enabled", true) || receiver.equals(entity) || receiver.getVehicle() == entity || (float) current.getValue() <= 0f)
+				if(!plugin.getConfig().getBoolean("filters.entitydata.health.enabled", true) || receiver.equals(entity)
+						|| (receiver.getVehicle() == entity && plugin.getConfig().getBoolean("filters.entitydata.health.ignore-vehicles", true)) || (float) current.getValue() <= 0f)
 					continue;
-				if(entity instanceof Wolf) {
+				if(entity instanceof Wolf && plugin.getConfig().getBoolean("filters.entitydata.health.ignore-tamed-dogs", true)) {
 					Wolf wolf = (Wolf) entity;
 					if(!wolf.isTamed())
 						newdata.remove(current);

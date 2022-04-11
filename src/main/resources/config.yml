@@ -3,17 +3,37 @@ allow-unsupported-versions: false
 
 #Filter specific settings.
 filters:
-  saturation: #Prevents players from seeing their saturation value.
+  #Prevents players from seeing their own saturation value.
+  saturation:
     enabled: true
-  worldseed: #Can make world seed cracking harder (but not impossible), but will slightly alter biome coloring.
+
+  #Can make world seed cracking harder (not impossible). Will slightly alter biome coloring.
+  worldseed:
     enabled: false
-  enchantseed: #Can make enchantment seed cracking harder (but not impossible), but will slightly alter the galactic alphabet text in the enchanting table menu. (That text is useless anyways)
+
+  #Can make enchantment seed cracking harder (not impossible). Will slightly alter the galactic alphabet text in the enchanting table menu. (That text is useless anyways.)
+  enchantseed:
     enabled: true
+
+  #Options for filtering data in entity metadata packets.
   entitydata:
-    enabled: true #This will toggle all entity data filters at once.
-    airticks: #Hides the oxygen amount of other entities.
+    #This will toggle all entity data filters at once.
+    enabled: true
+
+    #Hides the oxygen amount of other entities.
+    airticks: 
       enabled: false
-    health: #Hides the health of other entities.
+
+    #Hides the health of other entities.
+    health: 
       enabled: true
-    xp: #Hides the xp level of other players.
+
+      #Don't filter the health of the vehicle the player is riding. (The health bar of the current vehicle is visible in vanilla.)
+      ignore-vehicles: true
+
+      #Don't filter the health of tamed dogs. It's needed to display the tail position, which can be used to determine the dogs health in vanilla.
+      ignore-tamed-dogs: true
+
+    #Hides the xp level of other players.
+    xp: 
       enabled: true
