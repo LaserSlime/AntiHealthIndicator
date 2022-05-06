@@ -26,6 +26,7 @@ public class EntityMetadataAdapter extends PacketAdapter {
 	@Override
 	public void onPacketSending(PacketEvent event) {
 		Entity entity = event.getPacket().getEntityModifier(event).readSafely(0);
+		if(entity == null) return; //Return if entity can't be found (NPC plugins or similar might do this)
 		if(event.getPacketType() != PacketType.Play.Server.ENTITY_METADATA) {
 			StructureModifier<WrappedDataWatcher> watcherModifier = event.getPacket().getDataWatcherModifier();
 			WrappedDataWatcher watcher = watcherModifier.readSafely(0);
@@ -39,7 +40,7 @@ public class EntityMetadataAdapter extends PacketAdapter {
 	}
 
 	private List<WrappedWatchableObject> filter(Entity entity, Player receiver, List<WrappedWatchableObject> olddata) {
-		// Create a copy to prevent ConcurrentModificationException
+		// Create a copy to prevent concurrency issues
 		List<WrappedWatchableObject> newdata = new LinkedList<>(olddata);
 		for(WrappedWatchableObject current : olddata) {
 			if(EntityDataIndex.HEALTH.match(entity.getClass(), current.getIndex()) || EntityDataIndex.ABSORPTION.match(entity.getClass(), current.getIndex())) {
