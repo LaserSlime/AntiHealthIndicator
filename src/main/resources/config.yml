@@ -34,7 +34,7 @@ filters:
       #Don't filter the health of tamed dogs. It's needed to display the tail position, which can be used to determine the dogs health in vanilla.
       ignore-tamed-dogs: true
       
-      #Don't filter the health of ender dragons. Filtering their health will break the death animation.
+      #Don't filter the health of ender dragons. Filtering their health will break their death animation in 1.15+.
       #Doesn't affect the bossbar.
       ignore-enderdragon: true
       
