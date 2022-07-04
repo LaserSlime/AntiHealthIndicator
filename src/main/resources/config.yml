@@ -1,7 +1,7 @@
 #Allows the plugin to start even if it may not be compatible with the current server version. This can lead to unexpected bugs and should only be used in a testing environment.
 allow-unsupported-versions: false
 
-#Filter specific settings.
+#Filter specific settings
 filters:
   #Prevents players from seeing their own saturation value.
   saturation:
@@ -33,6 +33,14 @@ filters:
 
       #Don't filter the health of tamed dogs. It's needed to display the tail position, which can be used to determine the dogs health in vanilla.
       ignore-tamed-dogs: true
+      
+      #Don't filter the health of ender dragons. Filtering their health will break the death animation.
+      #Doesn't affect the bossbar.
+      ignore-enderdragon: true
+      
+      #Don't filter the health of withers. Filtering their health will break the shine effect when their health is less than 50% of their max health.
+      #Doesn't affect the bossbar.
+      ignore-wither: true
 
     #Hides the xp level of other players.
     xp: 

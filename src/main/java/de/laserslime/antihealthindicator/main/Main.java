@@ -1,8 +1,12 @@
 package de.laserslime.antihealthindicator.main;
 
+import java.util.Set;
+
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
+import com.google.common.collect.Sets;
 
 import de.laserslime.antihealthindicator.packetadapters.AttachEntityAdapter;
 import de.laserslime.antihealthindicator.packetadapters.EntityMetadataAdapter;
@@ -25,8 +29,14 @@ public class Main extends JavaPlugin {
 			return;
 		}
 
-		if(getConfig().getBoolean("filters.entitydata.enabled", true))
-			ProtocolLibrary.getProtocolManager().addPacketListener(new EntityMetadataAdapter(this));
+		if(getConfig().getBoolean("filters.entitydata.enabled", true)) {
+			Set<PacketType> types = Sets.newHashSet(PacketType.Play.Server.ENTITY_METADATA);
+			if(Version.getServerVersion().getProtocolVersion() < Version.V1_15_0.getProtocolVersion()) {
+				types.add(PacketType.Play.Server.SPAWN_ENTITY_LIVING);
+				types.add(PacketType.Play.Server.NAMED_ENTITY_SPAWN);
+			}
+			ProtocolLibrary.getProtocolManager().addPacketListener(new EntityMetadataAdapter(this, types));
+		}
 
 		if(getConfig().getBoolean("filters.saturation.enabled", true))
 			ProtocolLibrary.getProtocolManager().addPacketListener(new UpdateHealthAdapter(this));

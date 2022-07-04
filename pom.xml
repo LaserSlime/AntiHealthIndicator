@@ -14,7 +14,7 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.10.0</version>
+				<version>3.10.1</version>
 				<configuration>
 					<release>${java.version}</release>
 				</configuration>
@@ -41,7 +41,7 @@
 		<dependency>
 			<groupId>com.comphenix.protocol</groupId>
 			<artifactId>ProtocolLib</artifactId>
-			<version>4.7.0</version>
+			<version>4.8.0</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
