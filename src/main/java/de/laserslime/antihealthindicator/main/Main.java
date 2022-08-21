@@ -23,8 +23,7 @@ public class Main extends JavaPlugin {
 		saveDefaultConfig();
 		Version version = Version.getServerVersion();
 		if(version == Version.UNKNOWN && !getConfig().getBoolean("allow-unsupported-versions", false)) {
-			getLogger().info(
-					"Unsupported server version detected! Plugin will be disabled to prevent unexpected issues. Please check if theres an update available that supports this version.");
+			getLogger().info("Unsupported server version detected! Plugin will be disabled to prevent unexpected issues. Please check if theres an update available that supports this version.");
 			getLogger().info("You can allow unsupported versions in the config.yml AT YOUR OWN RISK.");
 			getPluginLoader().disablePlugin(this);
 			return;
@@ -49,8 +48,7 @@ public class Main extends JavaPlugin {
 			ProtocolLibrary.getProtocolManager().addPacketListener(new WorldSeedAdapter(this));
 
 		// Only apply mount fix if health filtering is enabled and vehicles are ignored
-		if(getConfig().getBoolean("filters.entitydata.health.enabled", true)
-				&& getConfig().getBoolean("filters.entitydata.health.ignore-vehicles", true)) {
+		if(getConfig().getBoolean("filters.entitydata.health.enabled", true) && getConfig().getBoolean("filters.entitydata.health.ignore-vehicles", true)) {
 			// 1.8 uses a different packet for mounting entities
 			if(version.getProtocolVersion() > Version.V1_8_4.getProtocolVersion())
 				ProtocolLibrary.getProtocolManager().addPacketListener(new MountAdapter(this));

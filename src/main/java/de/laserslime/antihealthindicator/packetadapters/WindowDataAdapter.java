@@ -17,6 +17,7 @@ public class WindowDataAdapter extends PacketAdapter {
 	public void onPacketSending(PacketEvent event) {
 		int action = event.getPacket().getIntegers().readSafely(0);
 		// Action id 3 is the enchanting seed. Seems to be the same across all versions
-		if(event.getPlayer().getOpenInventory().getType().equals(InventoryType.ENCHANTING) && action == 3) event.setCancelled(true);
+		if(event.getPlayer().getOpenInventory().getType().equals(InventoryType.ENCHANTING) && action == 3)
+			event.setCancelled(true);
 	}
 }
