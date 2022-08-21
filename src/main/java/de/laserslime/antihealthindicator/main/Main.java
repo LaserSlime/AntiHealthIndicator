@@ -22,7 +22,7 @@ public class Main extends JavaPlugin {
 	public void onEnable() {
 		saveDefaultConfig();
 		Version version = Version.getServerVersion();
-		if(version == Version.UNKNOWN && !getConfig().getBoolean("allow-unsupported-versions", false)) {
+		if(version == null && !getConfig().getBoolean("allow-unsupported-versions", false)) {
 			getLogger().info("Unsupported server version detected! Plugin will be disabled to prevent unexpected issues. Please check if theres an update available that supports this version.");
 			getLogger().info("You can allow unsupported versions in the config.yml AT YOUR OWN RISK.");
 			getPluginLoader().disablePlugin(this);
