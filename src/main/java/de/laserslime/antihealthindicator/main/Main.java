@@ -22,8 +22,8 @@ public class Main extends JavaPlugin {
 	public void onEnable() {
 		saveDefaultConfig();
 		Version version = Version.getServerVersion();
-		if(version == null && !getConfig().getBoolean("allow-unsupported-versions", false)) {
-			getLogger().info("Unsupported server version detected! Plugin will be disabled to prevent unexpected issues. Please check if theres an update available that supports this version.");
+		if(version == Version.UNKNOWN && !getConfig().getBoolean("allow-unsupported-versions", false)) {
+			getLogger().warning("Unsupported server version detected! Plugin will be disabled to prevent unexpected issues. Please check if theres an update available that supports this version.");
 			getLogger().info("You can allow unsupported versions in the config.yml AT YOUR OWN RISK.");
 			getPluginLoader().disablePlugin(this);
 			return;
@@ -31,7 +31,7 @@ public class Main extends JavaPlugin {
 
 		if(getConfig().getBoolean("filters.entitydata.enabled", true)) {
 			Set<PacketType> types = Sets.newHashSet(PacketType.Play.Server.ENTITY_METADATA);
-			if(Version.getServerVersion().getProtocolVersion() < Version.V1_15_0.getProtocolVersion()) {
+			if(version.getProtocolVersion() < Version.V1_15_0.getProtocolVersion()) {
 				types.add(PacketType.Play.Server.SPAWN_ENTITY_LIVING);
 				types.add(PacketType.Play.Server.NAMED_ENTITY_SPAWN);
 			}

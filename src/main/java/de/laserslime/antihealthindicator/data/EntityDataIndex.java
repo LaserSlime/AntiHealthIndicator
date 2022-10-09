@@ -23,7 +23,7 @@ public class EntityDataIndex {
 		this.entityClass = entityClass;
 	}
 
-	// Cool spaghetti code ik, but it's probably the best way in terms of performance and ram usage
+	// Cool spaghetti code, but it's probably the best way in terms of performance and ram usage
 	static {
 		int serverProtocol = Version.getServerVersion().getProtocolVersion();
 
