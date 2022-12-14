@@ -1,6 +1,5 @@
 package de.laserslime.antihealthindicator.packetadapters;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -41,11 +40,7 @@ public class AttachEntityAdapter extends PacketAdapter {
 				List<WrappedWatchableObject> watchers = new LinkedList<>();
 				watchers.add(new WrappedWatchableObject(EntityDataIndex.HEALTH.getIndex(), (float) livingVehicle.getHealth()));
 				packet.getWatchableCollectionModifier().writeSafely(0, watchers);
-				try {
-					ProtocolLibrary.getProtocolManager().sendServerPacket((Player) passenger, packet);
-				} catch(InvocationTargetException ex) {
-					ex.printStackTrace();
-				}
+				ProtocolLibrary.getProtocolManager().sendServerPacket((Player) passenger, packet);
 			}
 		}
 	}

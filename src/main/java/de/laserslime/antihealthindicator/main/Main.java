@@ -1,12 +1,12 @@
 package de.laserslime.antihealthindicator.main;
 
-import java.util.Set;
+import java.util.Arrays;
+import java.util.List;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
-import com.google.common.collect.Sets;
 
 import de.laserslime.antihealthindicator.packetadapters.AttachEntityAdapter;
 import de.laserslime.antihealthindicator.packetadapters.EntityMetadataAdapter;
@@ -18,6 +18,7 @@ import de.laserslime.antihealthindicator.util.Version;
 
 public class Main extends JavaPlugin {
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onEnable() {
 		saveDefaultConfig();
@@ -30,7 +31,7 @@ public class Main extends JavaPlugin {
 		}
 
 		if(getConfig().getBoolean("filters.entitydata.enabled", true)) {
-			Set<PacketType> types = Sets.newHashSet(PacketType.Play.Server.ENTITY_METADATA);
+			List<PacketType> types = Arrays.asList(PacketType.Play.Server.ENTITY_METADATA);
 			if(version.getProtocolVersion() < Version.V1_15_0.getProtocolVersion()) {
 				types.add(PacketType.Play.Server.SPAWN_ENTITY_LIVING);
 				types.add(PacketType.Play.Server.NAMED_ENTITY_SPAWN);

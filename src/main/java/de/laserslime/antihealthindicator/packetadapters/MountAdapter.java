@@ -1,7 +1,5 @@
 package de.laserslime.antihealthindicator.packetadapters;
 
-import java.lang.reflect.InvocationTargetException;
-
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -42,11 +40,7 @@ public class MountAdapter extends PacketAdapter {
 				WrappedDataWatcher watcher = new WrappedDataWatcher(livingVehicle);
 				watcher.setObject(new WrappedDataWatcherObject(EntityDataIndex.HEALTH.getIndex(), Registry.get(Float.class)), (float) livingVehicle.getHealth());
 				packet.getWatchableCollectionModifier().writeSafely(0, watcher.getWatchableObjects());
-				try {
-					ProtocolLibrary.getProtocolManager().sendServerPacket((Player) passenger, packet);
-				} catch(InvocationTargetException ex) {
-					ex.printStackTrace();
-				}
+				ProtocolLibrary.getProtocolManager().sendServerPacket((Player) passenger, packet);
 			}
 		}
 	}
