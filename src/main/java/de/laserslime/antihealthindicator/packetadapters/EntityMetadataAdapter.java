@@ -12,6 +12,7 @@ import org.bukkit.plugin.Plugin;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketAdapter;
+import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.reflect.StructureModifier;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher;
@@ -30,23 +31,28 @@ public class EntityMetadataAdapter extends PacketAdapter {
 		Entity entity = event.getPacket().getEntityModifier(event).readSafely(0);
 		if(entity == null)
 			return; // Return if entity can't be found (NPC plugins or similar might do this)
+
+		PacketContainer packet = event.getPacket().shallowClone();
 		if(event.getPacketType() != PacketType.Play.Server.ENTITY_METADATA) {
-			StructureModifier<WrappedDataWatcher> watcherModifier = event.getPacket().getDataWatcherModifier();
+			StructureModifier<WrappedDataWatcher> watcherModifier = packet.getDataWatcherModifier();
 			WrappedDataWatcher watcher = watcherModifier.readSafely(0);
 			if(watcher != null)
 				watcherModifier.writeSafely(0, new WrappedDataWatcher(filter(entity, event.getPlayer(), watcher.getWatchableObjects())));
 		}
-		StructureModifier<List<WrappedWatchableObject>> watchableCollectionModifier = event.getPacket().getWatchableCollectionModifier();
+
+		StructureModifier<List<WrappedWatchableObject>> watchableCollectionModifier = packet.getWatchableCollectionModifier();
 		List<WrappedWatchableObject> watchersold = watchableCollectionModifier.readSafely(0);
 		if(watchersold != null)
 			watchableCollectionModifier.writeSafely(0, filter(entity, event.getPlayer(), watchersold));
+		
+		event.setPacket(packet);
 	}
 
 	private List<WrappedWatchableObject> filter(Entity entity, Player receiver, List<WrappedWatchableObject> olddata) {
 		// Create a copy to prevent concurrency issues
 		List<WrappedWatchableObject> newdata = new LinkedList<>(olddata);
 		for(WrappedWatchableObject current : olddata) {
-			if(EntityDataIndex.HEALTH.match(entity.getClass(), current.getIndex())) {
+			if(EntityDataIndex.HEALTH.match(entity.getClass(), current.getIndex()) || EntityDataIndex.ABSORPTION.match(entity.getClass(), current.getIndex())) {
 				if(!plugin.getConfig().getBoolean("filters.entitydata.health.enabled", true) || receiver.equals(entity)
 						|| (receiver.getVehicle() == entity && plugin.getConfig().getBoolean("filters.entitydata.health.ignore-vehicles", true)) || (float) current.getValue() <= 0f)
 					continue;
