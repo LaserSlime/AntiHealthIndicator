@@ -9,7 +9,6 @@ import de.laserslime.antihealthindicator.util.Version;
 public class EntityDataIndex {
 
 	private int index;
-	private Class<?> typeClass;
 	private Class<?> entityClass;
 
 	public static final EntityDataIndex AIR_TICKS;
@@ -17,53 +16,52 @@ public class EntityDataIndex {
 	public static final EntityDataIndex ABSORPTION;
 	public static final EntityDataIndex XP;
 
-	public EntityDataIndex(int index, Class<?> typeClass, Class<?> entityClass) {
+	public EntityDataIndex(int index, Class<?> entityClass) {
 		this.index = index;
-		this.typeClass = typeClass;
 		this.entityClass = entityClass;
 	}
 
-	// Cool spaghetti code, but it's probably the best way in terms of performance and ram usage
+	// Apologies for the yandere dev code, but I don't want all of this data to permanently use memory.
 	static {
-		int serverProtocol = Version.getServerVersion().getProtocolVersion();
+		Version serverVersion = Version.getServerVersion();
 
 		// This stays the same for all versions
-		AIR_TICKS = new EntityDataIndex(1, Integer.class, Entity.class);
+		AIR_TICKS = new EntityDataIndex(1, Entity.class);
 
-		if(serverProtocol >= Version.V1_17_0.getProtocolVersion())
-			HEALTH = new EntityDataIndex(9, Float.class, LivingEntity.class);
-		else if(serverProtocol >= Version.V1_14_0.getProtocolVersion())
-			HEALTH = new EntityDataIndex(8, Float.class, LivingEntity.class);
-		else if(serverProtocol >= Version.V1_10_0.getProtocolVersion())
-			HEALTH = new EntityDataIndex(7, Float.class, LivingEntity.class);
+		if(serverVersion.isAtLeast(Version.V1_17_0))
+			HEALTH = new EntityDataIndex(9, LivingEntity.class);
+		else if(serverVersion.isAtLeast(Version.V1_14_0))
+			HEALTH = new EntityDataIndex(8, LivingEntity.class);
+		else if(serverVersion.isAtLeast(Version.V1_10_0))
+			HEALTH = new EntityDataIndex(7, LivingEntity.class);
 		else
-			HEALTH = new EntityDataIndex(6, Float.class, LivingEntity.class);
+			HEALTH = new EntityDataIndex(6, LivingEntity.class);
 
-		if(serverProtocol >= Version.V1_17_0.getProtocolVersion())
-			ABSORPTION = new EntityDataIndex(15, Float.class, Player.class);
-		else if(serverProtocol >= Version.V1_15_0.getProtocolVersion())
-			ABSORPTION = new EntityDataIndex(14, Float.class, Player.class);
-		else if(serverProtocol >= Version.V1_14_0.getProtocolVersion())
-			ABSORPTION = new EntityDataIndex(13, Float.class, Player.class);
-		else if(serverProtocol >= Version.V1_10_0.getProtocolVersion())
-			ABSORPTION = new EntityDataIndex(11, Float.class, Player.class);
-		else if(serverProtocol >= Version.V1_9_0.getProtocolVersion())
-			ABSORPTION = new EntityDataIndex(10, Float.class, Player.class);
+		if(serverVersion.isAtLeast(Version.V1_17_0))
+			ABSORPTION = new EntityDataIndex(15, Player.class);
+		else if(serverVersion.isAtLeast(Version.V1_15_0))
+			ABSORPTION = new EntityDataIndex(14, Player.class);
+		else if(serverVersion.isAtLeast(Version.V1_14_0))
+			ABSORPTION = new EntityDataIndex(13, Player.class);
+		else if(serverVersion.isAtLeast(Version.V1_10_0))
+			ABSORPTION = new EntityDataIndex(11, Player.class);
+		else if(serverVersion.isAtLeast(Version.V1_9_0))
+			ABSORPTION = new EntityDataIndex(10, Player.class);
 		else
-			ABSORPTION = new EntityDataIndex(17, Float.class, Player.class);
+			ABSORPTION = new EntityDataIndex(17, Player.class);
 
-		if(serverProtocol >= Version.V1_17_0.getProtocolVersion())
-			XP = new EntityDataIndex(16, Integer.class, Player.class);
-		else if(serverProtocol >= Version.V1_15_0.getProtocolVersion())
-			XP = new EntityDataIndex(15, Integer.class, Player.class);
-		else if(serverProtocol >= Version.V1_14_0.getProtocolVersion())
-			XP = new EntityDataIndex(14, Integer.class, Player.class);
-		else if(serverProtocol >= Version.V1_10_0.getProtocolVersion())
-			XP = new EntityDataIndex(12, Integer.class, Player.class);
-		else if(serverProtocol >= Version.V1_9_0.getProtocolVersion())
-			XP = new EntityDataIndex(11, Integer.class, Player.class);
+		if(serverVersion.isAtLeast(Version.V1_17_0))
+			XP = new EntityDataIndex(16, Player.class);
+		else if(serverVersion.isAtLeast(Version.V1_15_0))
+			XP = new EntityDataIndex(15, Player.class);
+		else if(serverVersion.isAtLeast(Version.V1_14_0))
+			XP = new EntityDataIndex(14, Player.class);
+		else if(serverVersion.isAtLeast(Version.V1_10_0))
+			XP = new EntityDataIndex(12, Player.class);
+		else if(serverVersion.isAtLeast(Version.V1_9_0))
+			XP = new EntityDataIndex(11, Player.class);
 		else
-			XP = new EntityDataIndex(18, Integer.class, Player.class);
+			XP = new EntityDataIndex(18, Player.class);
 	}
 
 	public boolean match(Class<?> entityClass, int index) {
@@ -72,10 +70,6 @@ public class EntityDataIndex {
 
 	public int getIndex() {
 		return index;
-	}
-
-	public Class<?> getTypeClass() {
-		return typeClass;
 	}
 
 	public Class<?> getEntityClass() {

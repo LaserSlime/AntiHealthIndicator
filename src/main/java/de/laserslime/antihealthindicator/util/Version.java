@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 
 public enum Version {
 
+	// If anyone knows a way to get the protocol version without garbage like this or hacky nms reflections, feel free to pr ;)
 	V1_8_4("1.8.8-R0.1-SNAPSHOT", 47), V1_9_0("1.9-R0.1-SNAPSHOT", 107), V1_9_1("1.9.2-R0.1-SNAPSHOT", 108), V1_9_2("1.9.2-R0.1-SNAPSHOT", 109), V1_9_3("1.9.4-R0.1-SNAPSHOT", 110),
 	V1_10_0("1.10.2-R0.1-SNAPSHOT", 210), V1_11_0("1.11-R0.1-SNAPSHOT", 315), V1_11_2("1.11.2-R0.1-SNAPSHOT", 316), V1_12_0("1.12-R0.1-SNAPSHOT", 335), V1_12_1("1.12.1-R0.1-SNAPSHOT", 338),
 	V1_12_2("1.12.2-R0.1-SNAPSHOT", 340), V1_13_0("1.13-R0.1-SNAPSHOT", 393), V1_13_1("1.13.1-R0.1-SNAPSHOT", 401), V1_13_2("1.13.2-R0.1-SNAPSHOT", 404), V1_14_0("1.14-R0.1-SNAPSHOT", 477),
@@ -21,19 +22,27 @@ public enum Version {
 		this.protocolVersion = protocolVersion;
 	}
 
+	public boolean isBefore(Version version) {
+		return protocolVersion < version.protocolVersion;
+	}
+
+	public boolean isAfter(Version version) {
+		return protocolVersion > version.protocolVersion;
+	}
+
+	public boolean isAtMost(Version version) {
+		return protocolVersion <= version.protocolVersion;
+	}
+
+	public boolean isAtLeast(Version version) {
+		return protocolVersion >= version.protocolVersion;
+	}
+
 	public static Version getServerVersion() {
 		for(Version currentVersion : Version.values()) {
-			if(currentVersion.getBukkitVersion().equals(Bukkit.getBukkitVersion()))
+			if(currentVersion.bukkitVersion.equals(Bukkit.getBukkitVersion()))
 				return currentVersion;
 		}
 		return UNKNOWN;
-	}
-
-	public String getBukkitVersion() {
-		return bukkitVersion;
-	}
-
-	public int getProtocolVersion() {
-		return protocolVersion;
 	}
 }

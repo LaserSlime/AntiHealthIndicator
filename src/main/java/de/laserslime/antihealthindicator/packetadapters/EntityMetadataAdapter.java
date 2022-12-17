@@ -1,6 +1,6 @@
 package de.laserslime.antihealthindicator.packetadapters;
 
-import java.util.LinkedList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.bukkit.entity.EnderDragon;
@@ -39,38 +39,43 @@ public class EntityMetadataAdapter extends PacketAdapter {
 			if(watcher != null)
 				watcherModifier.writeSafely(0, new WrappedDataWatcher(filter(entity, event.getPlayer(), watcher.getWatchableObjects())));
 		}
-
+		
 		StructureModifier<List<WrappedWatchableObject>> watchableCollectionModifier = packet.getWatchableCollectionModifier();
 		List<WrappedWatchableObject> watchersold = watchableCollectionModifier.readSafely(0);
 		if(watchersold != null)
 			watchableCollectionModifier.writeSafely(0, filter(entity, event.getPlayer(), watchersold));
-		
+
 		event.setPacket(packet);
 	}
 
-	private List<WrappedWatchableObject> filter(Entity entity, Player receiver, List<WrappedWatchableObject> olddata) {
-		// Create a copy to prevent concurrency issues
-		List<WrappedWatchableObject> newdata = new LinkedList<>(olddata);
-		for(WrappedWatchableObject current : olddata) {
-			if(EntityDataIndex.HEALTH.match(entity.getClass(), current.getIndex()) || EntityDataIndex.ABSORPTION.match(entity.getClass(), current.getIndex())) {
-				if(!plugin.getConfig().getBoolean("filters.entitydata.health.enabled", true) || receiver.equals(entity)
+	private List<WrappedWatchableObject> filter(Entity entity, Player receiver, List<WrappedWatchableObject> data) {
+		Iterator<WrappedWatchableObject> iterator = data.iterator();
+		while(iterator.hasNext()) {
+			WrappedWatchableObject current = iterator.next();
+
+			if(EntityDataIndex.HEALTH.match(entity.getClass(), current.getIndex())) {
+				if(!plugin.getConfig().getBoolean("filters.entitydata.health.enabled", true)
 						|| (receiver.getVehicle() == entity && plugin.getConfig().getBoolean("filters.entitydata.health.ignore-vehicles", true)) || (float) current.getValue() <= 0f)
 					continue;
+
 				if(entity instanceof Wolf && plugin.getConfig().getBoolean("filters.entitydata.health.ignore-tamed-dogs", true)) {
 					Wolf wolf = (Wolf) entity;
 					if(!wolf.isTamed())
-						newdata.remove(current);
+						iterator.remove();
 				} else if(!(entity instanceof EnderDragon && plugin.getConfig().getBoolean("filters.entitydata.health.ignore-enderdragon", true))
 						&& !(entity instanceof Wither && plugin.getConfig().getBoolean("filters.entitydata.health.ignore-wither", true)))
-					newdata.remove(current);
+					iterator.remove();
+			} else if(EntityDataIndex.ABSORPTION.match(entity.getClass(), current.getIndex())) {
+				if(!receiver.equals(entity))
+					iterator.remove();
 			} else if(EntityDataIndex.AIR_TICKS.match(entity.getClass(), current.getIndex())) {
 				if(plugin.getConfig().getBoolean("filters.entitydata.airticks.enabled", false))
-					newdata.remove(current);
+					iterator.remove();
 			} else if(EntityDataIndex.XP.match(entity.getClass(), current.getIndex())) {
 				if(plugin.getConfig().getBoolean("filters.entitydata.xp.enabled", true))
-					newdata.remove(current);
+					iterator.remove();
 			}
 		}
-		return newdata;
+		return data;
 	}
 }
