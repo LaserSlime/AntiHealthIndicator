@@ -1,5 +1,8 @@
 package de.laserslime.antihealthindicator.packetadapters;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -11,11 +14,13 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.reflect.StructureModifier;
+import com.comphenix.protocol.wrappers.WrappedDataValue;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher.Registry;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher.WrappedDataWatcherObject;
 
 import de.laserslime.antihealthindicator.data.EntityDataIndex;
+import de.laserslime.antihealthindicator.util.Version;
 
 public class MountAdapter extends PacketAdapter {
 
@@ -37,9 +42,15 @@ public class MountAdapter extends PacketAdapter {
 				LivingEntity livingVehicle = (LivingEntity) vehicle;
 				PacketContainer packet = new PacketContainer(PacketType.Play.Server.ENTITY_METADATA);
 				packet.getEntityModifier(event).writeSafely(0, livingVehicle);
-				WrappedDataWatcher watcher = new WrappedDataWatcher(livingVehicle);
-				watcher.setObject(new WrappedDataWatcherObject(EntityDataIndex.HEALTH.getIndex(), Registry.get(Float.class)), (float) livingVehicle.getHealth());
-				packet.getWatchableCollectionModifier().writeSafely(0, watcher.getWatchableObjects());
+				if(Version.getServerVersion().isBefore(Version.V1_19_3)) {
+					WrappedDataWatcher watcher = new WrappedDataWatcher(livingVehicle);
+					watcher.setObject(new WrappedDataWatcherObject(EntityDataIndex.HEALTH.getIndex(), Registry.get(Float.class)), (float) livingVehicle.getHealth());
+					packet.getWatchableCollectionModifier().writeSafely(0, watcher.getWatchableObjects());
+				} else {
+					List<WrappedDataValue> values = new ArrayList<>();
+					values.add(new WrappedDataValue(EntityDataIndex.HEALTH.getIndex(), Registry.get(Float.class), (float) livingVehicle.getHealth()));
+					packet.getDataValueCollectionModifier().write(0, values);
+				}
 				ProtocolLibrary.getProtocolManager().sendServerPacket((Player) passenger, packet);
 			}
 		}
