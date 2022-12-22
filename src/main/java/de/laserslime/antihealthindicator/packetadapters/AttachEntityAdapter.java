@@ -16,7 +16,7 @@ import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.reflect.StructureModifier;
 import com.comphenix.protocol.wrappers.WrappedWatchableObject;
 
-import de.laserslime.antihealthindicator.data.EntityDataIndex;
+import de.laserslime.antihealthindicator.entitydata.EntityDataIndexes;
 
 public class AttachEntityAdapter extends PacketAdapter {
 
@@ -38,7 +38,7 @@ public class AttachEntityAdapter extends PacketAdapter {
 				PacketContainer packet = new PacketContainer(PacketType.Play.Server.ENTITY_METADATA);
 				packet.getEntityModifier(event).writeSafely(0, vehicle);
 				List<WrappedWatchableObject> watchers = new LinkedList<>();
-				watchers.add(new WrappedWatchableObject(EntityDataIndex.HEALTH.getIndex(), (float) livingVehicle.getHealth()));
+				watchers.add(new WrappedWatchableObject(EntityDataIndexes.HEALTH, (float) livingVehicle.getHealth()));
 				packet.getWatchableCollectionModifier().writeSafely(0, watchers);
 				ProtocolLibrary.getProtocolManager().sendServerPacket((Player) passenger, packet);
 			}

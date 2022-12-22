@@ -19,7 +19,7 @@ import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher.Registry;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher.WrappedDataWatcherObject;
 
-import de.laserslime.antihealthindicator.data.EntityDataIndex;
+import de.laserslime.antihealthindicator.entitydata.EntityDataIndexes;
 import de.laserslime.antihealthindicator.util.Version;
 
 public class MountAdapter extends PacketAdapter {
@@ -44,11 +44,11 @@ public class MountAdapter extends PacketAdapter {
 				packet.getEntityModifier(event).writeSafely(0, livingVehicle);
 				if(Version.getServerVersion().isBefore(Version.V1_19_3)) {
 					WrappedDataWatcher watcher = new WrappedDataWatcher(livingVehicle);
-					watcher.setObject(new WrappedDataWatcherObject(EntityDataIndex.HEALTH.getIndex(), Registry.get(Float.class)), (float) livingVehicle.getHealth());
+					watcher.setObject(new WrappedDataWatcherObject(EntityDataIndexes.HEALTH, Registry.get(Float.class)), (float) livingVehicle.getHealth());
 					packet.getWatchableCollectionModifier().writeSafely(0, watcher.getWatchableObjects());
 				} else {
 					List<WrappedDataValue> values = new ArrayList<>();
-					values.add(new WrappedDataValue(EntityDataIndex.HEALTH.getIndex(), Registry.get(Float.class), (float) livingVehicle.getHealth()));
+					values.add(new WrappedDataValue(EntityDataIndexes.HEALTH, Registry.get(Float.class), (float) livingVehicle.getHealth()));
 					packet.getDataValueCollectionModifier().write(0, values);
 				}
 				ProtocolLibrary.getProtocolManager().sendServerPacket((Player) passenger, packet);
