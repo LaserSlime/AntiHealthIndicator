@@ -10,7 +10,7 @@ import com.comphenix.protocol.events.PacketEvent;
 public class WindowDataAdapter extends PacketAdapter {
 
 	public WindowDataAdapter(Plugin plugin) {
-		super(plugin, PacketType.Play.Server.UPDATE_HEALTH);
+		super(plugin, PacketType.Play.Server.WINDOW_DATA);
 	}
 
 	@Override
