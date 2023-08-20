@@ -25,7 +25,7 @@ import de.laserslime.antihealthindicator.util.Version;
 
 public class Main extends JavaPlugin {
 
-	Map<Integer, EntityDataFilter> filters = new HashMap<>();
+	private Map<Integer, EntityDataFilter> filters;
 
 	@Override
 	public void onEnable() {
@@ -39,6 +39,7 @@ public class Main extends JavaPlugin {
 		}
 
 		if(getConfig().getBoolean("filters.entitydata.enabled", true)) {
+			filters = new HashMap<>(4);
 			if(getConfig().getBoolean("filters.entitydata.airticks.enabled", false))
 				filters.put(EntityDataIndexes.AIR_TICKS, (entity, receiver, data) -> null);
 
