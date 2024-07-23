@@ -50,7 +50,7 @@ public class EntityMetadataAdapterAditional extends PacketAdapter {
 			}
 			watcherModifier.writeSafely(0, new WrappedDataWatcher(watchableObjects));
 		}
-		
+
 		StructureModifier<List<WrappedWatchableObject>> watchableObjectsModifier = packet.getWatchableCollectionModifier();
 		List<WrappedWatchableObject> watchableObjects = watchableObjectsModifier.readSafely(0);
 		if(watchableObjects != null) {
@@ -67,7 +67,7 @@ public class EntityMetadataAdapterAditional extends PacketAdapter {
 			}
 			watchableObjectsModifier.writeSafely(0, watchableObjects);
 		}
-		
+
 		event.setPacket(packet);
 	}
 }
