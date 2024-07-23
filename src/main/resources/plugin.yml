@@ -2,7 +2,7 @@ name: AntiHealthIndicator
 author: LaserSlime
 description: Filters server packets to hide information such as health and saturation which can't normally be seen in vanilla.
 main: de.laserslime.antihealthindicator.main.Main
-version: 1.3.5
+version: 1.3.6
 api-version: 1.13
 depend: [ProtocolLib]
 folia-supported: true
