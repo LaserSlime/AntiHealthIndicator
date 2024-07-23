@@ -1,6 +1,6 @@
 package de.laserslime.antihealthindicator.packetadapters;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.bukkit.entity.Entity;
@@ -47,7 +47,7 @@ public class MountAdapter extends PacketAdapter {
 					watcher.setObject(new WrappedDataWatcherObject(EntityDataIndexes.HEALTH, Registry.get(Float.class)), (float) livingVehicle.getHealth());
 					packet.getWatchableCollectionModifier().writeSafely(0, watcher.getWatchableObjects());
 				} else {
-					List<WrappedDataValue> values = new ArrayList<>();
+					List<WrappedDataValue> values = new LinkedList<>();
 					values.add(new WrappedDataValue(EntityDataIndexes.HEALTH, Registry.get(Float.class), (float) livingVehicle.getHealth()));
 					packet.getDataValueCollectionModifier().write(0, values);
 				}
