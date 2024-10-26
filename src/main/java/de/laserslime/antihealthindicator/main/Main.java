@@ -59,9 +59,9 @@ public class Main extends JavaPlugin {
 					if(version.isAtLeast(Version.V1_15_0) && entity instanceof IronGolem && getConfig().getBoolean("filters.entitydata.health.show-irongolem-cracks", true)) {
 						IronGolem golem = (IronGolem) entity;
 						double maxhealth = (float) golem.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-						double step = 25 / maxhealth * 100; // New cracks for for every 25% of health lost
+						double step = 25 / maxhealth * 100; // New cracks form for every 25% of health lost
 						double roundedHealth = (float) mFloor(health, step); // Round down to closest step
-						return (float) clamp(roundedHealth, step - 1, maxhealth - step); // Clamp to keep it above 0 and not above the first crack
+						return (float) clamp(roundedHealth, step - 1, maxhealth - step); // Clamp to keep it above 0 and not above the health where the first crack spawns
 					}
 
 					if((entity instanceof EnderDragon && getConfig().getBoolean("filters.entitydata.health.ignore-enderdragon", true))
