@@ -3,7 +3,9 @@ package de.laserslime.antihealthindicator.main;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.EnderDragon;
+import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Wither;
@@ -43,17 +45,29 @@ public class Main extends JavaPlugin {
 
 			if(getConfig().getBoolean("filters.entitydata.health.enabled", true)) {
 				filters.put(EntityDataIndexes.HEALTH, (entity, receiver, data) -> {
-					if(!(entity instanceof LivingEntity) || (receiver.getVehicle() == entity && getConfig().getBoolean("filters.entitydata.health.ignore-vehicles", true)) || (float) data <= 0f)
+					// Yes health is sent as a float https://wiki.vg/Entity_metadata#Living_Entity
+					float health = (float) data;
+					if(!(entity instanceof LivingEntity) || (receiver.getVehicle() == entity && getConfig().getBoolean("filters.entitydata.health.ignore-vehicles", true)) || health <= 0f)
 						return data;
 
 					if(entity instanceof Wolf && getConfig().getBoolean("filters.entitydata.health.ignore-tamed-dogs", true)) {
 						Wolf wolf = (Wolf) entity;
-						if(!wolf.isTamed())
-							return null;
-					} else if(!(entity instanceof EnderDragon && getConfig().getBoolean("filters.entitydata.health.ignore-enderdragon", true))
-							&& !(entity instanceof Wither && getConfig().getBoolean("filters.entitydata.health.ignore-wither", true)))
-						return null;
-					return data;
+						if(wolf.isTamed())
+							return data;
+					}
+
+					if(version.isAtLeast(Version.V1_15_0) && entity instanceof IronGolem && getConfig().getBoolean("filters.entitydata.health.show-irongolem-cracks", true)) {
+						IronGolem golem = (IronGolem) entity;
+						double maxhealth = (float) golem.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+						double step = 25 / maxhealth * 100; // New cracks for for every 25% of health lost
+						double roundedHealth = (float) mFloor(health, step); // Round down to closest step
+						return (float) clamp(roundedHealth, step - 1, maxhealth - step); // Clamp to keep it above 0 and not above the first crack
+					}
+
+					if((entity instanceof EnderDragon && getConfig().getBoolean("filters.entitydata.health.ignore-enderdragon", true))
+							|| (entity instanceof Wither && getConfig().getBoolean("filters.entitydata.health.ignore-wither", true)))
+						return data;
+					return null;
 				});
 			}
 
@@ -102,5 +116,31 @@ public class Main extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		ProtocolLibrary.getProtocolManager().removePacketListeners(this);
+	}
+
+	private double mFloor(double value, double factor) {
+		return Math.floor(value / factor) * factor;
+	}
+
+	// Copied from Java source (this was only added to java.util.Math class in Java 21 wtf????)
+	private double clamp(double value, double min, double max) {
+		// This unusual condition allows keeping only one branch
+		// on common path when min < max and neither of them is NaN.
+		// If min == max, we should additionally check for +0.0/-0.0 case,
+		// so we're still visiting the if statement.
+		if(!(min < max)) { // min greater than, equal to, or unordered with respect to max; NaN values are unordered
+			if(Double.isNaN(min)) {
+				throw new IllegalArgumentException("min is NaN");
+			}
+			if(Double.isNaN(max)) {
+				throw new IllegalArgumentException("max is NaN");
+			}
+			if(Double.compare(min, max) > 0) {
+				throw new IllegalArgumentException(min + " > " + max);
+			}
+			// Fall-through if min and max are exactly equal (or min = -0.0 and max = +0.0)
+			// and none of them is NaN
+		}
+		return Math.min(max, Math.max(value, min));
 	}
 }

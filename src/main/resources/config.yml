@@ -33,14 +33,18 @@ filters:
 
       #Don't filter the health of tamed dogs. It's needed to display the tail position, which can be used to determine the dogs health in vanilla.
       ignore-tamed-dogs: true
-      
+
       #Don't filter the health of ender dragons. Filtering their health will break their death animation in 1.15+.
       #Doesn't affect the bossbar.
       ignore-enderdragon: true
-      
+
       #Don't filter the health of withers. Filtering their health will break the shine effect when their health is less than 50% of their max health.
       #Doesn't affect the bossbar.
       ignore-wither: true
+
+      #This fixes being unable to see the cracks on iron golems when they lose health on 1.15+ servers.
+      #To achieve this, the health is sent in steps of 25, which is when the golem cracks, so health indicators don't provide more information than in vanilla.
+      show-irongolem-cracks: true
 
     #Hides the xp level of other players.
     xp: 
