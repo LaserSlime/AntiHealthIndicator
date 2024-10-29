@@ -45,9 +45,11 @@ public class Main extends JavaPlugin {
 
 			if(getConfig().getBoolean("filters.entitydata.health.enabled", true)) {
 				filters.put(EntityDataIndexes.HEALTH, (entity, receiver, data) -> {
-					// Yes health is sent as a float https://wiki.vg/Entity_metadata#Living_Entity
+					if(!(entity instanceof LivingEntity) || (receiver.getVehicle() == entity && getConfig().getBoolean("filters.entitydata.health.ignore-vehicles", true)))
+						return data;
+					// Yes health is sent as a float, even tho it's stored as a double https://wiki.vg/Entity_metadata#Living_Entity
 					float health = (float) data;
-					if(!(entity instanceof LivingEntity) || (receiver.getVehicle() == entity && getConfig().getBoolean("filters.entitydata.health.ignore-vehicles", true)) || health <= 0f)
+					if(health <= 0f)
 						return data;
 
 					if(entity instanceof Wolf && getConfig().getBoolean("filters.entitydata.health.ignore-tamed-dogs", true)) {
