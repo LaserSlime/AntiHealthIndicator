@@ -38,8 +38,7 @@ public class MountAdapter extends PacketAdapter {
 		if(passenger instanceof Player && passenger.equals(event.getPlayer())) {
 			StructureModifier<Entity> entityModifier = event.getPacket().getEntityModifier(event);
 			Entity vehicle = entityModifier.readSafely(0);
-			if(vehicle instanceof LivingEntity) {
-				LivingEntity livingVehicle = (LivingEntity) vehicle;
+			if(vehicle instanceof LivingEntity livingVehicle) {
 				PacketContainer packet = new PacketContainer(PacketType.Play.Server.ENTITY_METADATA);
 				packet.getEntityModifier(event).writeSafely(0, livingVehicle);
 				if(Version.getServerVersion().isBefore(Version.V1_19_3)) {

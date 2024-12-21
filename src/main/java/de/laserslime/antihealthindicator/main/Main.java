@@ -52,14 +52,10 @@ public class Main extends JavaPlugin {
 					if(health <= 0f)
 						return data;
 
-					if(entity instanceof Wolf && getConfig().getBoolean("filters.entitydata.health.ignore-tamed-dogs", true)) {
-						Wolf wolf = (Wolf) entity;
-						if(wolf.isTamed())
-							return data;
-					}
+					if(entity instanceof Wolf wolf && wolf.isTamed() && getConfig().getBoolean("filters.entitydata.health.ignore-tamed-dogs", true))
+						return data;
 
-					if(version.isAtLeast(Version.V1_15_0) && entity instanceof IronGolem && getConfig().getBoolean("filters.entitydata.health.show-irongolem-cracks", true)) {
-						IronGolem golem = (IronGolem) entity;
+					if(version.isAtLeast(Version.V1_15_0) && entity instanceof IronGolem golem && getConfig().getBoolean("filters.entitydata.health.show-irongolem-cracks", true)) {
 						double maxhealth = (float) golem.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
 						double step = 25 / maxhealth * 100; // New cracks form for every 25% of health lost
 						double roundedHealth = (float) mFloor(health, step); // Round down to closest step

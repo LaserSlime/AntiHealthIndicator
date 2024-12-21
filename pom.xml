@@ -4,10 +4,10 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.laserslime</groupId>
     <artifactId>antihealthindicator</artifactId>
-    <version>1.4.1</version>
+    <version>1.4.2</version>
     <name>AntiHealthIndicatorPlugin</name>
     <properties>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <build>
