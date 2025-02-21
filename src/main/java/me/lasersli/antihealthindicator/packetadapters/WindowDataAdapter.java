@@ -1,4 +1,4 @@
-package de.laserslime.antihealthindicator.packetadapters;
+package me.lasersli.antihealthindicator.packetadapters;
 
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.plugin.Plugin;

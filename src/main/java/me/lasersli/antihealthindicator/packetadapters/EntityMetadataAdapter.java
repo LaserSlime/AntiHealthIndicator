@@ -1,4 +1,4 @@
-package de.laserslime.antihealthindicator.packetadapters;
+package me.lasersli.antihealthindicator.packetadapters;
 
 import java.util.Iterator;
 import java.util.List;
@@ -15,8 +15,8 @@ import com.comphenix.protocol.reflect.StructureModifier;
 import com.comphenix.protocol.wrappers.WrappedDataValue;
 import com.comphenix.protocol.wrappers.WrappedWatchableObject;
 
-import de.laserslime.antihealthindicator.entitydata.EntityDataFilter;
-import de.laserslime.antihealthindicator.util.Version;
+import me.lasersli.antihealthindicator.entitydata.EntityDataFilter;
+import me.lasersli.antihealthindicator.util.Version;
 
 public class EntityMetadataAdapter extends PacketAdapter {
 

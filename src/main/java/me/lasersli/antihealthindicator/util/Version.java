@@ -1,4 +1,4 @@
-package de.laserslime.antihealthindicator.util;
+package me.lasersli.antihealthindicator.util;
 
 import org.bukkit.Bukkit;
 

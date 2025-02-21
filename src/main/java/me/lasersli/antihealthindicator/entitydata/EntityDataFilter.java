@@ -1,4 +1,4 @@
-package de.laserslime.antihealthindicator.entitydata;
+package me.lasersli.antihealthindicator.entitydata;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;

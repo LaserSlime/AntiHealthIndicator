@@ -1,4 +1,4 @@
-package de.laserslime.antihealthindicator.main;
+package me.lasersli.antihealthindicator.main;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,16 +14,16 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.comphenix.protocol.ProtocolLibrary;
 
-import de.laserslime.antihealthindicator.entitydata.EntityDataFilter;
-import de.laserslime.antihealthindicator.entitydata.EntityDataIndexes;
-import de.laserslime.antihealthindicator.packetadapters.AttachEntityAdapter;
-import de.laserslime.antihealthindicator.packetadapters.EntityMetadataAdapter;
-import de.laserslime.antihealthindicator.packetadapters.EntityMetadataAdapterAditional;
-import de.laserslime.antihealthindicator.packetadapters.MountAdapter;
-import de.laserslime.antihealthindicator.packetadapters.UpdateHealthAdapter;
-import de.laserslime.antihealthindicator.packetadapters.WindowDataAdapter;
-import de.laserslime.antihealthindicator.packetadapters.WorldSeedAdapter;
-import de.laserslime.antihealthindicator.util.Version;
+import me.lasersli.antihealthindicator.entitydata.EntityDataFilter;
+import me.lasersli.antihealthindicator.entitydata.EntityDataIndexes;
+import me.lasersli.antihealthindicator.packetadapters.AttachEntityAdapter;
+import me.lasersli.antihealthindicator.packetadapters.EntityMetadataAdapter;
+import me.lasersli.antihealthindicator.packetadapters.EntityMetadataAdapterAditional;
+import me.lasersli.antihealthindicator.packetadapters.MountAdapter;
+import me.lasersli.antihealthindicator.packetadapters.UpdateHealthAdapter;
+import me.lasersli.antihealthindicator.packetadapters.WindowDataAdapter;
+import me.lasersli.antihealthindicator.packetadapters.WorldSeedAdapter;
+import me.lasersli.antihealthindicator.util.Version;
 
 public class Main extends JavaPlugin {
 

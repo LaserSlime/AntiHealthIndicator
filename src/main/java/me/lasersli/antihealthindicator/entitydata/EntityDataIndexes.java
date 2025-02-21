@@ -1,6 +1,6 @@
-package de.laserslime.antihealthindicator.entitydata;
+package me.lasersli.antihealthindicator.entitydata;
 
-import de.laserslime.antihealthindicator.util.Version;
+import me.lasersli.antihealthindicator.util.Version;
 
 public class EntityDataIndexes {
 

@@ -1,4 +1,4 @@
-package de.laserslime.antihealthindicator.packetadapters;
+package me.lasersli.antihealthindicator.packetadapters;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -19,8 +19,8 @@ import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher.Registry;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher.WrappedDataWatcherObject;
 
-import de.laserslime.antihealthindicator.entitydata.EntityDataIndexes;
-import de.laserslime.antihealthindicator.util.Version;
+import me.lasersli.antihealthindicator.entitydata.EntityDataIndexes;
+import me.lasersli.antihealthindicator.util.Version;
 
 public class MountAdapter extends PacketAdapter {
 
