@@ -47,7 +47,7 @@ public class Main extends JavaPlugin {
 				filters.put(EntityDataIndexes.HEALTH, (entity, receiver, data) -> {
 					if(!(entity instanceof LivingEntity) || (receiver.getVehicle() == entity && getConfig().getBoolean("filters.entitydata.health.ignore-vehicles", true)))
 						return data;
-					// Yes health is sent as a float, even tho it's stored as a double https://wiki.vg/Entity_metadata#Living_Entity
+					// Yes health is sent as a float, even tho it's stored as a double https://minecraft.wiki/w/Java_Edition_protocol/Entity_metadata#Living_Entity
 					float health = (float) data;
 					if(health <= 0f)
 						return data;
