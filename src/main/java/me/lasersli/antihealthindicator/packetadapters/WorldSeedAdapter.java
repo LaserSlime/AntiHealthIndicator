@@ -14,6 +14,7 @@ public class WorldSeedAdapter extends PacketAdapter {
 
 	@Override
 	public void onPacketSending(PacketEvent event) {
+		//TODO this might not work on newer versions because mojang put this data into a seperate class
 		event.getPacket().getLongs().writeSafely(0, 0L);
 	}
 }
