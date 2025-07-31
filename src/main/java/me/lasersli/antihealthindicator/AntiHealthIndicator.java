@@ -1,4 +1,4 @@
-package me.lasersli.antihealthindicator.main;
+package me.lasersli.antihealthindicator;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +25,7 @@ import me.lasersli.antihealthindicator.packetadapters.WindowDataAdapter;
 import me.lasersli.antihealthindicator.packetadapters.WorldSeedAdapter;
 import me.lasersli.antihealthindicator.util.Version;
 
-public class Main extends JavaPlugin {
+public class AntiHealthIndicator extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
