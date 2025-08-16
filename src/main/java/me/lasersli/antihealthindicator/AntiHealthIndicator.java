@@ -1,9 +1,8 @@
-package me.lasersli.antihealthindicator.main;
+package me.lasersli.antihealthindicator;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.IronGolem;
@@ -17,7 +16,6 @@ import com.comphenix.protocol.ProtocolLibrary;
 
 import me.lasersli.antihealthindicator.entitydata.EntityDataFilter;
 import me.lasersli.antihealthindicator.entitydata.EntityDataIndexes;
-import me.lasersli.antihealthindicator.packetadapters.AntiAutoRespawnAdapter;
 import me.lasersli.antihealthindicator.packetadapters.AttachEntityAdapter;
 import me.lasersli.antihealthindicator.packetadapters.EntityMetadataAdapter;
 import me.lasersli.antihealthindicator.packetadapters.EntityMetadataAdapterAditional;
@@ -27,7 +25,7 @@ import me.lasersli.antihealthindicator.packetadapters.WindowDataAdapter;
 import me.lasersli.antihealthindicator.packetadapters.WorldSeedAdapter;
 import me.lasersli.antihealthindicator.util.Version;
 
-public class Main extends JavaPlugin {
+public class AntiHealthIndicator extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
@@ -40,10 +38,6 @@ public class Main extends JavaPlugin {
 			return;
 		}
 
-		AntiAutoRespawnAdapter adapter = new AntiAutoRespawnAdapter(this);
-		ProtocolLibrary.getProtocolManager().addPacketListener(adapter);
-		Bukkit.getPluginManager().registerEvents(adapter, this);
-
 		if(getConfig().getBoolean("filters.entitydata.enabled", true)) {
 			Map<Integer, EntityDataFilter> filters = new HashMap<>(4);
 			if(getConfig().getBoolean("filters.entitydata.airticks.enabled", false))
@@ -51,7 +45,7 @@ public class Main extends JavaPlugin {
 
 			if(getConfig().getBoolean("filters.entitydata.health.enabled", true)) {
 				filters.put(EntityDataIndexes.HEALTH, (entity, receiver, data) -> {
-					if(!(entity instanceof LivingEntity) || receiver.getVehicle() == entity && getConfig().getBoolean("filters.entitydata.health.ignore-vehicles", true))
+					if(!(entity instanceof LivingEntity) || (receiver.getVehicle() == entity && getConfig().getBoolean("filters.entitydata.health.ignore-vehicles", true)))
 						return data;
 					// Yes health is sent as a float, even tho it's stored as a double https://minecraft.wiki/w/Java_Edition_protocol/Entity_metadata#Living_Entity
 					float health = (float) data;
@@ -68,8 +62,8 @@ public class Main extends JavaPlugin {
 						return (float) clamp(roundedHealth, step - 1, maxhealth - step); // Clamp to keep it above 0 and not above the health where the first crack spawns
 					}
 
-					if(entity instanceof EnderDragon && getConfig().getBoolean("filters.entitydata.health.ignore-enderdragon", true)
-							|| entity instanceof Wither && getConfig().getBoolean("filters.entitydata.health.ignore-wither", true))
+					if((entity instanceof EnderDragon && getConfig().getBoolean("filters.entitydata.health.ignore-enderdragon", true))
+							|| (entity instanceof Wither && getConfig().getBoolean("filters.entitydata.health.ignore-wither", true)))
 						return data;
 					return null;
 				});

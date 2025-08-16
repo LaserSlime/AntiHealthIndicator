@@ -17,7 +17,9 @@ import com.comphenix.protocol.reflect.StructureModifier;
 import com.comphenix.protocol.wrappers.WrappedDataValue;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher.Registry;
+import com.comphenix.protocol.wrappers.WrappedDataWatcher.Serializer;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher.WrappedDataWatcherObject;
+import com.google.common.reflect.TypeToken;
 
 import me.lasersli.antihealthindicator.entitydata.EntityDataIndexes;
 import me.lasersli.antihealthindicator.util.Version;
@@ -39,15 +41,17 @@ public class MountAdapter extends PacketAdapter {
 			StructureModifier<Entity> entityModifier = event.getPacket().getEntityModifier(event);
 			Entity vehicle = entityModifier.readSafely(0);
 			if(vehicle instanceof LivingEntity livingVehicle) {
+				// Why ProtocolLib, why not just let me use the class directly :(
+				final Serializer floatSerializer = Registry.get(TypeToken.of(Float.class).getType());
 				PacketContainer packet = new PacketContainer(PacketType.Play.Server.ENTITY_METADATA);
 				packet.getEntityModifier(event).writeSafely(0, livingVehicle);
 				if(Version.getServerVersion().isBefore(Version.V1_19_3)) {
 					WrappedDataWatcher watcher = new WrappedDataWatcher(livingVehicle);
-					watcher.setObject(new WrappedDataWatcherObject(EntityDataIndexes.HEALTH, Registry.get(Float.class)), (float) livingVehicle.getHealth());
+					watcher.setObject(new WrappedDataWatcherObject(EntityDataIndexes.HEALTH, floatSerializer), (float) livingVehicle.getHealth());
 					packet.getWatchableCollectionModifier().writeSafely(0, watcher.getWatchableObjects());
 				} else {
 					List<WrappedDataValue> values = new LinkedList<>();
-					values.add(new WrappedDataValue(EntityDataIndexes.HEALTH, Registry.get(Float.class), (float) livingVehicle.getHealth()));
+					values.add(new WrappedDataValue(EntityDataIndexes.HEALTH, floatSerializer, (float) livingVehicle.getHealth()));
 					packet.getDataValueCollectionModifier().write(0, values);
 				}
 				ProtocolLibrary.getProtocolManager().sendServerPacket((Player) passenger, packet);
