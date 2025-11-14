@@ -24,7 +24,9 @@ public class EntityDataIndexes {
 		else
 			HEALTH = 6;
 
-		if(serverVersion.isAtLeast(Version.V1_17_0))
+		if(serverVersion.isAtLeast(Version.V1_21_9))
+			ABSORPTION = 17;
+		else if(serverVersion.isAtLeast(Version.V1_17_0))
 			ABSORPTION = 15;
 		else if(serverVersion.isAtLeast(Version.V1_15_0))
 			ABSORPTION = 14;
@@ -37,7 +39,9 @@ public class EntityDataIndexes {
 		else
 			ABSORPTION = 17;
 
-		if(serverVersion.isAtLeast(Version.V1_17_0))
+		if(serverVersion.isAtLeast(Version.V1_21_9))
+			XP = 18;
+		else if(serverVersion.isAtLeast(Version.V1_17_0))
 			XP = 16;
 		else if(serverVersion.isAtLeast(Version.V1_15_0))
 			XP = 15;
