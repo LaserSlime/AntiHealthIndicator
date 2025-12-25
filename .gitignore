@@ -1,10 +1,21 @@
-# IDE Files
-/.classpath
-/.project
-/.settings/
-/.vscode
+.paper-nms/
 
-# Build
-/target/
-/bin/
-/*.log
+# General
+bin/
+*.log
+
+# Eclipse IDE
+.classpath
+.project
+.settings/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# Visual Studio Code
+.vscode/
+
+# Maven
+target/
+dependency-reduced-pom.xml
