@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>me.lasersli</groupId>
     <artifactId>antihealthindicator</artifactId>
-    <version>1.4.4</version>
+    <version>1.4.5</version>
     <name>AntiHealthIndicatorPlugin</name>
     <properties>
         <java.version>17</java.version>
@@ -16,14 +16,14 @@
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.14.0</version>
+                <version>3.14.1</version>
                 <configuration>
                     <release>${java.version}</release>
                 </configuration>
             </plugin>
             <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.4.2</version>
+                <version>3.5.0</version>
                 <configuration>
                     <archive>
                         <addMavenDescriptor>false</addMavenDescriptor>
