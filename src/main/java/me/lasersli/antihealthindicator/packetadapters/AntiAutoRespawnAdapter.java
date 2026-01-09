@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import org.bukkit.GameRule;
+import org.bukkit.GameRules;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -27,7 +27,7 @@ public class AntiAutoRespawnAdapter extends PacketAdapter implements Listener {
 
 	@Override
 	public void onPacketReceiving(PacketEvent event) {
-		if(event.getPlayer().getWorld().getGameRuleValue(GameRule.DO_IMMEDIATE_RESPAWN))
+		if(event.getPlayer().getWorld().getGameRuleValue(GameRules.IMMEDIATE_RESPAWN))
 			return;
 		ClientCommand cmd = event.getPacket().getClientCommands().readSafely(0);
 		if(cmd.equals(ClientCommand.PERFORM_RESPAWN) && System.currentTimeMillis() - deathTimes.getOrDefault(event.getPlayer().getUniqueId(), 0L) < 1000)
