@@ -20,7 +20,7 @@ import me.lasersli.antihealthindicator.util.Version;
 
 public class EntityMetadataAdapter extends PacketAdapter {
 
-	private Map<Integer, EntityDataFilter> filters;
+	private final Map<Integer, EntityDataFilter> filters;
 
 	public EntityMetadataAdapter(Plugin plugin, Map<Integer, EntityDataFilter> filters) {
 		super(plugin, PacketType.Play.Server.ENTITY_METADATA);

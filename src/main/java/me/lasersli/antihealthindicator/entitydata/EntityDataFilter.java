@@ -5,5 +5,5 @@ import org.bukkit.entity.Player;
 
 public interface EntityDataFilter {
 
-	public Object filter(Entity entity, Player receiver, Object data);
+	Object filter(Entity entity, Player receiver, Object data);
 }

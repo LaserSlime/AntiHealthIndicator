@@ -18,10 +18,10 @@ public enum Version {
 	V1_21_5("1.21.5-R0.1-SNAPSHOT", 770), V1_21_6("1.21.6-R0.1-SNAPSHOT", 771), V1_21_7("1.21.7-R0.1-SNAPSHOT", 772), V1_21_8("1.21.8-R0.1-SNAPSHOT", 772), V1_21_9("1.21.9-R0.1-SNAPSHOT", 773),
 	V1_21_10("1.21.10-R0.1-SNAPSHOT", 773), V_1_21_11("1.21.11-R0.1-SNAPSHOT", 774), UNKNOWN("", Integer.MAX_VALUE);
 
-	private String bukkitVersion;
-	private int protocolVersion;
+	private final String bukkitVersion;
+	private final int protocolVersion;
 
-	private Version(String bukkitVersion, int protocolVersion) {
+	Version(String bukkitVersion, int protocolVersion) {
 		this.bukkitVersion = bukkitVersion;
 		this.protocolVersion = protocolVersion;
 	}

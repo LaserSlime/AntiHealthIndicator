@@ -34,7 +34,7 @@ public class MountAdapter extends PacketAdapter {
 	public void onPacketSending(PacketEvent event) {
 		int[] ids = event.getPacket().getIntegerArrays().readSafely(0);
 		// if the array is empty they are dismounting
-		if(ids.length <= 0)
+		if(ids.length == 0)
 			return;
 		Entity passenger = ProtocolLibrary.getProtocolManager().getEntityFromID(event.getPlayer().getWorld(), ids[0]);
 		if(passenger instanceof Player && passenger.equals(event.getPlayer())) {

@@ -20,7 +20,7 @@ import me.lasersli.antihealthindicator.entitydata.EntityDataFilter;
 
 public class EntityMetadataAdapterAditional extends PacketAdapter {
 
-	private Map<Integer, EntityDataFilter> filters;
+	private final Map<Integer, EntityDataFilter> filters;
 
 	@SuppressWarnings("deprecation")
 	public EntityMetadataAdapterAditional(Plugin plugin, Map<Integer, EntityDataFilter> filters) {
